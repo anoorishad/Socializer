@@ -1,48 +1,72 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <!-- our sttyle sheet link -->
-    <link rel="stylesheet" href="./assets/CSS/style.css">
-    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <!-- our style sheet link -->
+    <link rel="stylesheet" href="./assets/CSS/style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Socializer</title>
+  </head>
 
-</head>
-
-<body>
-    <header>
-        <!-- this is a test navbar to try the materializecss -->
-        <nav>
-            <div class="nav-wrapper">
-              <a href="#" class="brand-logo">Logo</a>
-              <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="sass.html">Sass</a></li>
-                <li><a href="badges.html">Components</a></li>
-                <li><a href="collapsible.html">JavaScript</a></li>
-              </ul>
-            </div>
-          </nav>
-          <!-- ///// we can delete this part -->
+  <body>
+    <header id="titleContainer">
+      <button id="savedEventsBtn">Saved Event(s)</button>
+      <h1>Socializer</h1>
+      <h3>Instructions</h3>
     </header>
     <main>
+      <section id="initialContainer" class="">
+        <h3>What type of event are you planning?</h3>
+        <!-- Event type dropdown -->
+        <div id = "eventFilter" class="input-field">
+          <select>
+            <option value="" disabled selected>Choose your option</option>
+            <option value="Birthday_Party">Birthday Party</option>
+            <option value="Engagement_Party">Engagement Party</option>
+            <option value="BBQ">BBQ</option>
+            <option value="Date_Night">Date Night</option>
+            <option value="Baby_Shower">Baby Shower</option>
+            <option value="Brunch">Brunch</option>
+            <option value="Dinner_Party">Dinner Party</option>
+            <option value="Thanksgiving">Thanksgiving</option>
+            <option value="Holiday">Holiday</option>
+            <option value="General_Party">General Party</option>
+          </select>
+        </div>
 
+        <input
+          id="eventNameInput"
+          type="text"
+          placeholder="What do you want to name this event?"
+        />
+
+        <!-- Alcohol Filter -->
+        <div id = "alchFilter" class="input-field">
+          <select>
+            <option value="" disabled selected>Choose your option</option>
+            <option value="Inc_Alcohol">Include Alcohol</option>
+            <option value="Dont_Inc">Don't Include</option>
+            <option value="Show_Both">Show Both</option>
+          </select>
+          <label>Include Alcohol?</label>
+        </div>
+      </section>
+      <!--Submit Button  -->
+      <button id="submitBtn">Submit</button>
     </main>
 
-    <footer>
-
-    </footer>
-
+    <footer></footer>
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="./assets/js/script.js"></script>
-
-</body>
-
+  </body>
 </html>
