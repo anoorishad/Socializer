@@ -1,4 +1,4 @@
-let apiKey = "b0a8a5b9834041e99d8d37ab32a81871";
+let apiKey = "1ee7d026a8b341b5a9487d1138f04f25";
 let numberofRecipes = 2;
 
 let presentRecipe = [];
@@ -17,9 +17,21 @@ let thanksgiving = [];
 let holiday = [];
 let generalParty = [];
 
-let theam = "BBQ"
-let requestUrlfoodRecipeIds;
-getRecipeData();
+var submitBtn = $('#submitBtn');
+var themeSelection = $('#eventFilter');
+var alchSelection = $('#alchFilter');
+var eventNameSelection = $('#eventNameInput');
+
+
+submitBtn.on('click', function(){
+   themeSelection = $('#eventFilter').val();
+   alchSelection = $('#alchFilter').val();
+   eventNameSelection = $('#eventNameInput').val();
+   console.log(themeSelection + " " + alchSelection + " " + eventNameSelection);
+
+})
+
+// getRecipeData();
 
 // dropdown initializer
 $(document).ready(function () {
