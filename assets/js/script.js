@@ -1,4 +1,9 @@
-let apiKey = "fa268d1621ac4a24bea0212fb0c93108";
+let apiKey = "b0a8a5b9834041e99d8d37ab32a81871";
+let numberofRecipes = 2;
+
+let presentRecipe = [];
+let theme = "BBQ"
+let requestfoodRecipeURL;
 let foodtype = ["sliders", "hamburger", "BBQ", "salad", "pizza", "cake", "sandwhich", "casserole", "pasta", "steak", "roast", "pancakes", "eggs", "frittata", "tacos", "thanksgiving", "dessert"]
 
 let birthdayParty = [];
@@ -7,7 +12,7 @@ let BBQ = [];
 let dateNight = [];
 let babyShower = [];
 let brunch = [];
-let dinnerParty =[];
+let dinnerParty = [];
 let thanksgiving = [];
 let holiday = [];
 let generalParty = [];
@@ -17,15 +22,15 @@ let requestUrlfoodRecipeIds;
 getRecipeData();
 
 // dropdown initializer
-$(document).ready(function(){
+$(document).ready(function () {
     $('select').formSelect();
-  });
+});
 
 
 // fetching data from https://spoonacular.com/food-api/ 
 function getRecipeData() {
     let idArray = [];
-    for (let i = 0; i < foodtype.length; i++) {        
+    for (let i = 0; i < foodtype.length; i++) {
         requestUrlfoodRecipeIds = "https://api.spoonacular.com/recipes/complexSearch?query=" + foodtype[i] + "&apiKey=" + apiKey
         fetch(requestUrlfoodRecipeIds)
             .then(function (response) {
@@ -39,12 +44,15 @@ function getRecipeData() {
                     idRecipe: data.results
                 }
 
-              
+
                 idArray.push(food);
+                // wait untill the array to fetch all the data
                 if (idArray.length === foodtype.length) {
                     console.log(idArray)
-                    setRecipeforTheam(idArray)
-                    
+                    // TODO: submit button
+                    setRecipeforTheme(idArray, theme)
+
+
                 }
 
             });
@@ -52,89 +60,209 @@ function getRecipeData() {
 
 
 }
-// geth the id's from the idArray for specefic meal
-function getTheamRecipes(theamSelected, myidArray) {
+
+function fetchURLfromID(myId) {
+    requestfoodRecipeURL = "https://api.spoonacular.com/recipes/" + myId + "/information?apiKey=" + apiKey
+    return fetch(requestfoodRecipeURL)
+        .then(function (response) {
+            console.log("response" + response)
+
+            return response.json();
+        })
+        .then(function (data) {
+            return data;
+        });
+
+}
+// get the id's from the idArray for specefic meal
+function getThemeRecipes(themeSelected, myidArray) {
     let selectedIds = [];
     for (let i = 0; i < myidArray.length; i++) {
 
-        if (myidArray[i].name === theamSelected)
+        if (myidArray[i].name === themeSelected)
             selectedIds = myidArray[i];
     }
     return selectedIds;
 }
+// add the meal Recipe to the Theme 
+// function setRecipeforTheme(myidArray, myTheme) {
+//     // BBQ
+//     if (myTheme === "BBQ") {
+//         BBQ.push(getThemeRecipes("steak", myidArray))
+//         BBQ.push(getThemeRecipes("hamburger", myidArray))
+//         for (let i = 0; i < numberofRecipes; i++) {
+//             presentRecipe = pickRecipe(BBQ);
+//         }
+//         getURL(presentRecipe);
+//         console.log(presentRecipe)
 
-function setRecipeforTheam(myidArray) {
+//     }
+// }
+function getURL(myPresentRecipe) {
+    let myData = "";
+    // let recipesURL="urlishere"
+    // for(let i=0;i<myPresentRecipe.length; i++){
+    // console.log(myPresentRecipe[i].id)
+    // myData=fetchURLfromID(myPresentRecipe[i].id)
+    // while(!myData){
 
-    if (theam === "BBQ") {
-        BBQ.push(getTheamRecipes("sliders", myidArray))
-        BBQ.push(getTheamRecipes("hamburger", myidArray))
-        BBQ.push(getTheamRecipes("BBQ", myidArray))
-        BBQ.push(getTheamRecipes("salad", myidArray))
+    // }
+
+    ////////
+    console.log(myPresentRecipe.length)
+    myPresentRecipe.forEach(async function (currentItem) {
+        myData = await fetchURLfromID(currentItem.id)
+        console.log("hiiii"+myPresentRecipe.length)
+        console.log(myData)
+        // myPresentRecipe[i].URL = myData.sourceUrl;
+    })
+
+    ///////
+    // console.log(myData)
+    //  myPresentRecipe[i].URL=myData.sourceUrl;
+
+    // console.log(myPresentRecipe[i])
+}
+
+// }
+function pickRecipe(myRecepieArray) {
+    let randomIndex;
+    var numbers = [];
+
+    for (let i = 0; i < myRecepieArray.length; i++) {
+        do {
+
+            randomIndex = Math.floor(Math.random() * myRecepieArray[i].idRecipe.length);
+        } while (numbers.includes(randomIndex));
+        numbers.push(randomIndex);
+        presentRecipe.push(myRecepieArray[i].idRecipe[randomIndex])
+
+    }
+    return presentRecipe;
+    // ///////
+    // var numbers = [];
+    // var randomnumber;
+    // do {
+    //     randomnumber = Math.floor(Math.random() * 999999) + 100000;
+    // } while (numbers.includes(randomnumber));
+    // numbers.push(randomnumber);
+
+    //////////
+}
+// TODO: creat all the Theme and food for it 
+
+function setRecipeforTheme(myidArray, myTheme) {
+
+    if (myTheme === "BBQ") {
+        BBQ.push(getThemeRecipes("sliders", myidArray))
+        BBQ.push(getThemeRecipes("hamburger", myidArray))
+        BBQ.push(getThemeRecipes("BBQ", myidArray))
+        BBQ.push(getThemeRecipes("salad", myidArray))
+        for (let i = 0; i < numberofRecipes; i++) {
+            presentRecipe = pickRecipe(BBQ);
+        }
+        getURL(presentRecipe);
         console.log(BBQ);
     }
-    if (theam === "birthdayParty") {
-        birthdayParty.push(getTheamRecipes("sliders", myidArray))
-        birthdayParty.push(getTheamRecipes("pizza", myidArray))
-        birthdayParty.push(getTheamRecipes("cake", myidArray))
-        birthdayParty.push(getTheamRecipes("salad", myidArray))
+    if (myTheme === "birthdayParty") {
+        birthdayParty.push(getThemeRecipes("sliders", myidArray))
+        birthdayParty.push(getThemeRecipes("pizza", myidArray))
+        birthdayParty.push(getThemeRecipes("cake", myidArray))
+        birthdayParty.push(getThemeRecipes("salad", myidArray))
+        for (let i = 0; i < numberofRecipes; i++) {
+            presentRecipe = pickRecipe(birthdayParty);
+        }
+        getURL(presentRecipe);
         console.log(birthdayParty);
     }
-    if (theam === "engagementParty") {
-        engagementParty.push(getTheamRecipes("sandwich", myidArray))
-        engagementParty.push(getTheamRecipes("salad", myidArray))
-        engagementParty.push(getTheamRecipes("cake", myidArray))
-        engagementParty.push(getTheamRecipes("casserole", myidArray))
+    if (myTheme === "engagementParty") {
+        engagementParty.push(getThemeRecipes("sandwich", myidArray))
+        engagementParty.push(getThemeRecipes("salad", myidArray))
+        engagementParty.push(getThemeRecipes("cake", myidArray))
+        engagementParty.push(getThemeRecipes("casserole", myidArray))
+        for (let i = 0; i < numberofRecipes; i++) {
+            presentRecipe = pickRecipe(engagementParty);
+        }
+        getURL(presentRecipe);
         console.log(engagementParty);
     }
-    if (theam === "dateNight") {
-        dateNight.push(getTheamRecipes("pasta", myidArray))
-        dateNight.push(getTheamRecipes("salad", myidArray))
-        dateNight.push(getTheamRecipes("steak", myidArray))
-        dateNight.push(getTheamRecipes("roast", myidArray))
+    if (myTheme === "dateNight") {
+        dateNight.push(getThemeRecipes("pasta", myidArray))
+        dateNight.push(getThemeRecipes("salad", myidArray))
+        dateNight.push(getThemeRecipes("steak", myidArray))
+        dateNight.push(getThemeRecipes("roast", myidArray))
+        for (let i = 0; i < numberofRecipes; i++) {
+            presentRecipe = pickRecipe(dateNight);
+        }
+        getURL(presentRecipe);
         console.log(dateNight);
     }
-    if (theam === "babyShower") {
-        babyShower.push(getTheamRecipes("sandwhich", myidArray))
-        babyShower.push(getTheamRecipes("salad", myidArray))
-        babyShower.push(getTheamRecipes("steak", myidArray))
-        babyShower.push(getTheamRecipes("roast", myidArray))
+    if (myTheme === "babyShower") {
+        babyShower.push(getThemeRecipes("sandwhich", myidArray))
+        babyShower.push(getThemeRecipes("salad", myidArray))
+        babyShower.push(getThemeRecipes("steak", myidArray))
+        babyShower.push(getThemeRecipes("roast", myidArray))
+        for (let i = 0; i < numberofRecipes; i++) {
+            presentRecipe = pickRecipe(babyShower);
+        }
+        getURL(presentRecipe);
         console.log(babyShower);
     }
-    if (theam === "brunch") {
-        brunch.push(getTheamRecipes("pancakes", myidArray))
-        brunch.push(getTheamRecipes("eggs", myidArray))
-        brunch.push(getTheamRecipes("frittata", myidArray))
-        brunch.push(getTheamRecipes("salad", myidArray))
+    if (myTheme === "brunch") {
+        brunch.push(getThemeRecipes("pancakes", myidArray))
+        brunch.push(getThemeRecipes("eggs", myidArray))
+        brunch.push(getThemeRecipes("frittata", myidArray))
+        brunch.push(getThemeRecipes("salad", myidArray))
+        for (let i = 0; i < numberofRecipes; i++) {
+            presentRecipe = pickRecipe(brunch);
+        }
+        getURL(presentRecipe);
         console.log(brunch);
     }
-    if (theam === "dinnerParty") {
-        dinnerParty.push(getTheamRecipes("steak", myidArray))
-        dinnerParty.push(getTheamRecipes("salad", myidArray))
-        dinnerParty.push(getTheamRecipes("pasta", myidArray))
-        dinnerParty.push(getTheamRecipes("tacos", myidArray))
+    if (myTheme === "dinnerParty") {
+        dinnerParty.push(getThemeRecipes("steak", myidArray))
+        dinnerParty.push(getThemeRecipes("salad", myidArray))
+        dinnerParty.push(getThemeRecipes("pasta", myidArray))
+        dinnerParty.push(getThemeRecipes("tacos", myidArray))
+        for (let i = 0; i < numberofRecipes; i++) {
+            presentRecipe = pickRecipe(dinnerParty);
+        }
+        getURL(presentRecipe);
         console.log(dinnerParty);
     }
-    if (theam === "thanksgiving") {
-        thanksgiving.push(getTheamRecipes("casserole", myidArray))
-        thanksgiving.push(getTheamRecipes("thanksgiving", myidArray))
-        thanksgiving.push(getTheamRecipes("roast", myidArray))
-        thanksgiving.push(getTheamRecipes("dessert", myidArray))
+    if (myTheme === "thanksgiving") {
+        thanksgiving.push(getThemeRecipes("casserole", myidArray))
+        thanksgiving.push(getThemeRecipes("thanksgiving", myidArray))
+        thanksgiving.push(getThemeRecipes("roast", myidArray))
+        thanksgiving.push(getThemeRecipes("dessert", myidArray))
+        for (let i = 0; i < numberofRecipes; i++) {
+            presentRecipe = pickRecipe(thanksgiving);
+        }
+        getURL(presentRecipe);
         console.log(thanksgiving);
     }
-    if (theam === "holiday") {
-        holiday.push(getTheamRecipes("casserole", myidArray))
-        holiday.push(getTheamRecipes("salad", myidArray))
-        holiday.push(getTheamRecipes("roast", myidArray))
-        holiday.push(getTheamRecipes("dessert", myidArray))
+    if (myTheme === "holiday") {
+        holiday.push(getThemeRecipes("casserole", myidArray))
+        holiday.push(getThemeRecipes("salad", myidArray))
+        holiday.push(getThemeRecipes("roast", myidArray))
+        holiday.push(getThemeRecipes("dessert", myidArray))
+        for (let i = 0; i < numberofRecipes; i++) {
+            presentRecipe = pickRecipe(holiday);
+        }
+        getURL(presentRecipe);
         console.log(holiday);
     }
-    if (theam === "generalParty") {
-        generalParty.push(getTheamRecipes("pasta", myidArray))
-        generalParty.push(getTheamRecipes("pizza", myidArray))
-        generalParty.push(getTheamRecipes("tacos", myidArray))
-        generalParty.push(getTheamRecipes("roast", myidArray))
-            console.log(generalParty);
+    if (myTheme === "generalParty") {
+        generalParty.push(getThemeRecipes("pasta", myidArray))
+        generalParty.push(getThemeRecipes("pizza", myidArray))
+        generalParty.push(getThemeRecipes("tacos", myidArray))
+        generalParty.push(getThemeRecipes("roast", myidArray))
+        for (let i = 0; i < numberofRecipes; i++) {
+            presentRecipe = pickRecipe(generalParty);
+        }
+        getURL(presentRecipe);
+        console.log(generalParty);
     }
-    
+
 }
 
