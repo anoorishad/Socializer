@@ -1,18 +1,18 @@
-let apiKey = "5f91f06f23374ae98dda0352ea280671";
-let foodtype = ["pizza", "hamburger", "pasta", "steak", "hotdog", "salad", "egg"]
+let apiKey = "fa268d1621ac4a24bea0212fb0c93108";
+let foodtype = ["pizza", "hamburger", "pasta", "steak", "hotdog", "salad", "egg", "holiday"]
 
 let BBQ = [];
 let theam = "BBQ"
-let requestUrlfoodRecepieIds;
-getrecepieData();
+let requestUrlfoodRecipeIds;
+getRecipeData();
 
 
 // fetching data from https://spoonacular.com/food-api/ 
-function getrecepieData() {
+function getRecipeData() {
     let idArray = [];
     for (let i = 0; i < foodtype.length; i++) {        
-        requestUrlfoodRecepieIds = "https://api.spoonacular.com/recipes/complexSearch?query=" + foodtype[i] + "&apiKey=" + apiKey
-        fetch(requestUrlfoodRecepieIds)
+        requestUrlfoodRecipeIds = "https://api.spoonacular.com/recipes/complexSearch?query=" + foodtype[i] + "&apiKey=" + apiKey
+        fetch(requestUrlfoodRecipeIds)
             .then(function (response) {
                 console.log("response" + response)
 
@@ -21,14 +21,14 @@ function getrecepieData() {
             .then(function (data) {
                 let food = {
                     name: foodtype[i],
-                    idRecepie: data.results
+                    idRecipe: data.results
                 }
 
               
                 idArray.push(food);
                 if (idArray.length === foodtype.length) {
                     console.log(idArray)
-                    setRecepieforTheam(idArray)
+                    setRecipeforTheam(idArray)
                     
                 }
 
@@ -38,7 +38,7 @@ function getrecepieData() {
 
 }
 // geth the id's from the idArray for specefic meal
-function getTheamRecepies(theamSelected, myidArray) {
+function getTheamRecipes(theamSelected, myidArray) {
     let selectedIds = [];
     for (let i = 0; i < myidArray.length; i++) {
 
@@ -47,12 +47,12 @@ function getTheamRecepies(theamSelected, myidArray) {
     }
     return selectedIds;
 }
-// add the meal recepie to the theam 
-function setRecepieforTheam(myidArray) {
+// add the meal Recipe to the theam 
+function setRecipeforTheam(myidArray) {
     // BBQ
     if (theam === "BBQ") {
-        BBQ.push(getTheamRecepies("steak", myidArray))
-        BBQ.push(getTheamRecepies("hamburger", myidArray))
+        BBQ.push(getTheamRecipes("steak", myidArray))
+        BBQ.push(getTheamRecipes("hamburger", myidArray))
         console.log(BBQ)
     }
     
