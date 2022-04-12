@@ -1,5 +1,5 @@
 let apiKey = "fa268d1621ac4a24bea0212fb0c93108";
-let foodtype = ["pizza", "hamburger", "pasta", "steak", "hotdog", "salad", "egg", "holiday"]
+let foodtype = ["sliders", "hamburger", "BBQ", "salad", "pizza", "cake", "sandwhich", "casserole", "pasta", "steak", "roast", "pancakes", "eggs", "frittata", "tacos", "thanksgiving", "dessert"]
 
 let birthdayParty = [];
 let engagementParty = [];
@@ -57,25 +57,9 @@ function getTheamRecipes(theamSelected, myidArray) {
     }
     return selectedIds;
 }
-// TODO: creat all the theam and food for it 
-// Birthday Party
-    // add food
-// Engagement Party
-    // add food
-// Date Night
-    // add food
-// Baby Shower
-    // add food
-// Brunch
-    // add food
-// Dinner Party
-    // add food
-// Thanksgiving
-     // add food
-// Holiday
-     // add food
+
 function setRecipeforTheam(myidArray) {
-    // BBQ
+
     if (theam === "BBQ") {
         BBQ.push(getTheamRecipes("sliders", myidArray))
         BBQ.push(getTheamRecipes("hamburger", myidArray))
