@@ -16,6 +16,11 @@ let theam = "BBQ"
 let requestUrlfoodRecipeIds;
 getRecipeData();
 
+// dropdown initializer
+$(document).ready(function(){
+    $('select').formSelect();
+  });
+
 
 // fetching data from https://spoonacular.com/food-api/ 
 function getRecipeData() {
