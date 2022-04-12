@@ -1,8 +1,10 @@
-let apiKey = "fa268d1621ac4a24bea0212fb0c93108";
-let foodtype = ["pizza", "hamburger", "pasta", "steak", "hotdog", "salad", "egg", "holiday"]
-
+let apiKey = "b0a8a5b9834041e99d8d37ab32a81871";
+let foodtype = ["pizza", "hamburger", "pasta", "steak", "hotdog", "salad", "egg", "holiday", "wedding"]
+let numberofRecipes = 2;
 let BBQ = [];
-let theam = "BBQ"
+let presentRecipe = [];
+let theme = "BBQ"
+let requestfoodRecipeURL;
 let requestUrlfoodRecipeIds;
 getRecipeData();
 
@@ -10,7 +12,7 @@ getRecipeData();
 // fetching data from https://spoonacular.com/food-api/ 
 function getRecipeData() {
     let idArray = [];
-    for (let i = 0; i < foodtype.length; i++) {        
+    for (let i = 0; i < foodtype.length; i++) {
         requestUrlfoodRecipeIds = "https://api.spoonacular.com/recipes/complexSearch?query=" + foodtype[i] + "&apiKey=" + apiKey
         fetch(requestUrlfoodRecipeIds)
             .then(function (response) {
@@ -24,12 +26,15 @@ function getRecipeData() {
                     idRecipe: data.results
                 }
 
-              
+
                 idArray.push(food);
+                // wait untill the array to fetch all the data
                 if (idArray.length === foodtype.length) {
                     console.log(idArray)
-                    setRecipeforTheam(idArray)
-                    
+                    // TODO: submit button
+                    setRecipeforTheme(idArray, theme)
+
+
                 }
 
             });
@@ -37,26 +42,94 @@ function getRecipeData() {
 
 
 }
-// geth the id's from the idArray for specefic meal
-function getTheamRecipes(theamSelected, myidArray) {
+
+function fetchURLfromID(myId){
+    requestfoodRecipeURL = "https://api.spoonacular.com/recipes/"+myId+"/information?apiKey=" + apiKey
+    return fetch(requestfoodRecipeURL)
+        .then(function (response) {
+            console.log("response" + response)
+
+            return response.json();
+        })
+        .then(function (data) {
+            return data;
+        });
+    
+}
+// get the id's from the idArray for specefic meal
+function getThemeRecipes(themeSelected, myidArray) {
     let selectedIds = [];
     for (let i = 0; i < myidArray.length; i++) {
 
-        if (myidArray[i].name === theamSelected)
+        if (myidArray[i].name === themeSelected)
             selectedIds = myidArray[i];
     }
     return selectedIds;
 }
-// add the meal Recipe to the theam 
-function setRecipeforTheam(myidArray) {
+// add the meal Recipe to the Theme 
+function setRecipeforTheme(myidArray, myTheme) {
     // BBQ
-    if (theam === "BBQ") {
-        BBQ.push(getTheamRecipes("steak", myidArray))
-        BBQ.push(getTheamRecipes("hamburger", myidArray))
-        console.log(BBQ)
+    if (myTheme === "BBQ") {
+        BBQ.push(getThemeRecipes("steak", myidArray))
+        BBQ.push(getThemeRecipes("hamburger", myidArray))
+        for (let i = 0; i < numberofRecipes; i++) {
+            presentRecipe = pickRecipe(BBQ);
+        }
+        getURL(presentRecipe);
+        console.log(presentRecipe)
+
     }
-    
- // TODO: creat all the theam and food for it 
+    function getURL(myPresentRecipe){
+        let myData="";
+        // let recipesURL="urlishere"
+        // for(let i=0;i<myPresentRecipe.length; i++){
+            // console.log(myPresentRecipe[i].id)
+            // myData=fetchURLfromID(myPresentRecipe[i].id)
+            // while(!myData){
+                
+            // }
+
+            ////////
+            console.log(myPresentRecipe.length)
+            myPresentRecipe.forEach(async function(currentItem) {
+                 myData = await fetchURLfromID(currentItem.id)
+                console.log(myData)
+                myPresentRecipe[i].URL=myData.sourceUrl;
+              })
+
+            ///////
+            // console.log(myData)
+            //  myPresentRecipe[i].URL=myData.sourceUrl;
+             
+            // console.log(myPresentRecipe[i])
+        }
+        
+    // }
+    function pickRecipe(myRecepieArray) {
+        let randomIndex;
+        var numbers = [];
+       
+        for (let i = 0; i < myRecepieArray.length; i++) {
+            do {
+
+                randomIndex = Math.floor(Math.random() * myRecepieArray[i].idRecipe.length);
+            } while (numbers.includes(randomIndex));
+            numbers.push(randomIndex);
+            presentRecipe.push(myRecepieArray[i].idRecipe[randomIndex])
+            
+        }
+        return presentRecipe;
+        // ///////
+        // var numbers = [];
+        // var randomnumber;
+        // do {
+        //     randomnumber = Math.floor(Math.random() * 999999) + 100000;
+        // } while (numbers.includes(randomnumber));
+        // numbers.push(randomnumber);
+
+        //////////
+    }
+    // TODO: creat all the Theme and food for it 
 }
     // Birthday Party
         // add food
@@ -75,4 +148,3 @@ function setRecipeforTheam(myidArray) {
     // Holiday
          // add food
 
-   
