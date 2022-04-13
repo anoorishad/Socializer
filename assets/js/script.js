@@ -28,9 +28,16 @@ submitBtn.on('click', function(){
    alchSelection = $('#alchFilter').val();
    eventNameSelection = $('#eventNameInput').val();
    console.log(themeSelection + " " + alchSelection + " " + eventNameSelection);
-
+   resultPageLayout();
 })
 
+
+function resultPageLayout(){
+    var main = $("main");
+    main.attr("class", "row");
+    var initContainer = $("#initialContainer");
+    initContainer.addClass("col s3")
+}
 // getRecipeData();
 
 // dropdown initializer
