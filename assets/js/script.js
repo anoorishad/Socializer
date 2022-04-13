@@ -1,13 +1,16 @@
-let apiKey = "56cebe6bd237404a8ea46d129f5bd93c";
+let apiKey = "e4643a8f809a46d094d058b8af3ae381";
 let numberofRecipes = 2;
-
+let foodContainerDiv = $("#food-container")
 let presentRecipe = [];
 let theme = "BBQ"
 let requestfoodRecipeURL;
 let foodtype = ["sliders", "hamburger", "BBQ", "salad", "pizza", "cake", "sandwhich",
     "casserole", "pasta", "steak", "roast", "pancakes", "eggs",
     "frittata", "tacos", "thanksgiving", "dessert"]
+    // include all ids
 let idArray = [];
+// include all recepies for specific theme
+let cardData =[];
 let birthdayParty = [];
 let engagementParty = [];
 let BBQ = [];
@@ -38,10 +41,10 @@ submitBtn.on('click', async function () {
     eventNameSelection = $('#eventNameInput').val();
     console.log(themeSelection + " " + alchSelection + " " + eventNameSelection);
 
-    let cardData = await setRecipeforTheme(idArray, themeSelection)
+     cardData = await setRecipeforTheme(idArray, themeSelection)
     console.log("the card is:")
     console.log(cardData)
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < cardData.length; i++) {
 
         creatCard(cardData,i)
     }
@@ -67,12 +70,63 @@ function resultPageLayout() {
 $(document).ready(function () {
     $('select').formSelect();
 });
+// modal
 
+// food target
+foodContainerDiv.on("click",".dataInfo",function(event){
+    event.preventDefault();
+    console.log(event.target)
+    let moreInfobtnID =($(event.target).attr("data-info"))
+    console.log(cardData)
+    $('.modal').modal();
+    // $("#text").text(cardData[0].title)
+    for (let i = 0; i < cardData.length; i++) {
+            if (cardData[i].id == moreInfobtnID) {
+                $("#image").attr("src",cardData[i].image)
+                $("#title").text(cardData[i].title)
+
+                $("#readyTime").text("Ready Time: "+ cardData[i].readyInMinutes + " Minutes")
+                // $("#readyTime").text("Ready Time:" )
+                for (let j = 0; j < cardData[i].dishTypes.length; j++) {
+                    let liEl = $("<li>")
+                        liEl.text(cardData[i].dishTypes[j])
+    
+                    $("#dishType").append(liEl)
+                    // $(".modal").append($("#dishType"))
+                
+                }
+                $("#urlLink").attr("href",cardData[i].sourceUrl)
+                $("#urlLink").text("URL is: "+ cardData[i].sourceUrl)
+
+                for (let k = 0; k < cardData[i].extendedIngredients.length; k++) {
+                    let liIngEl = $("<li>")
+                    liIngEl.text(cardData[i].extendedIngredients[k].name)
+    
+                    $("#ingredients").append(liIngEl)
+                    // $(".modal").append($("#ingredients"))
+                
+                }                
+
+    
+            }
+            }
+})
+// if(cardData.length !=0){
+
+
+$(document).ready(function(){
+    // $('.modal').modal();
+    // $("#text").text(cardData[0].title)
+//     
+    // }
+  });
+// }
 
 // fetching data from https://spoonacular.com/food-api/ 
 function creatCard(myCardData,index) {
-    let foodContainerDiv = $("#food-container")
+    
     let divEl = $("<div>")
+    
     divEl.addClass("col s2 m-6")
     let cardDiv = $("<div>")
     cardDiv.addClass("card")
@@ -84,7 +138,9 @@ function creatCard(myCardData,index) {
     let aEl = $("<a>")
     aEl.addClass("btn-floating halfway-fab waves-effect waves-light red")
     let iEl = $("<i>")
-    iEl.addClass("material-icons");
+    iEl.addClass("dataInfo material-icons btn modal-trigger");
+    iEl.attr("data-info", myCardData[index].id)
+    iEl.attr("data-target","modal1")
     iEl.text("...")
 
 

@@ -12,7 +12,15 @@ header{
   cursor: pointer;
 }
 #food-container{
-width: auto;
+width: 50%;
+}
+#readyTime{
+  /* font-size: 10px; */
+}
+li,ul{
+  list-style-type: circle;
+  /* display: flex;
+  flex-direction: column; */
 }
 .row
 {
@@ -21,7 +29,14 @@ width: auto;
     /* height: fit-content;  */
    /* margin-top:10px;  */
 }
-
+.modal-content{
+  padding-left: 10px;
+}
+.modal{
+  
+  /* height:max-content; */
+  /* margin: 20px; */
+}
 .dropbtn:hover, .dropbtn:focus {
   background-color: #2980B9;
 }
