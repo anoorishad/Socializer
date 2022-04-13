@@ -1,12 +1,12 @@
-let apiKey = "1ee7d026a8b341b5a9487d1138f04f25";
+let apiKey = "56cebe6bd237404a8ea46d129f5bd93c";
 let numberofRecipes = 2;
 
 let presentRecipe = [];
 let theme = "BBQ"
 let requestfoodRecipeURL;
-let foodtype = ["sliders", "hamburger", "BBQ", "salad", "pizza", "cake", "sandwhich", 
-                "casserole", "pasta", "steak", "roast", "pancakes", "eggs",
-                "frittata", "tacos", "thanksgiving", "dessert"]
+let foodtype = ["sliders", "hamburger", "BBQ", "salad", "pizza", "cake", "sandwhich",
+    "casserole", "pasta", "steak", "roast", "pancakes", "eggs",
+    "frittata", "tacos", "thanksgiving", "dessert"]
 let idArray = [];
 let birthdayParty = [];
 let engagementParty = [];
@@ -29,17 +29,25 @@ if (JSON.parse(localStorage.getItem("allRecipe")) === null) {
 // get the informationfrom local array
 idArray = JSON.parse(localStorage.getItem("allRecipe"))
 
-if(idArray.length === 0){
+if (idArray.length === 0) {
     getRecipeData();
 }
-submitBtn.on('click', function(){
-   themeSelection = $('#eventFilter').val();
-   alchSelection = $('#alchFilter').val();
-   eventNameSelection = $('#eventNameInput').val();
-   console.log(themeSelection + " " + alchSelection + " " + eventNameSelection);
- 
-    let cardData= setRecipeforTheme(idArray, themeSelection)
-    creatCard(cardData)
+submitBtn.on('click', async function () {
+    themeSelection = $('#eventFilter').val();
+    alchSelection = $('#alchFilter').val();
+    eventNameSelection = $('#eventNameInput').val();
+    console.log(themeSelection + " " + alchSelection + " " + eventNameSelection);
+
+    let cardData = await setRecipeforTheme(idArray, themeSelection)
+    console.log("the card is:")
+    console.log(cardData)
+    for (let i = 0; i < 8; i++) {
+
+        creatCard(cardData,i)
+    }
+
+
+
 
     resultPageLayout();
 })
@@ -47,7 +55,7 @@ submitBtn.on('click', function(){
 
 
 
-function resultPageLayout(){
+function resultPageLayout() {
     var main = $("main");
     main.attr("class", "row");
     var initContainer = $("#initialContainer");
@@ -62,11 +70,44 @@ $(document).ready(function () {
 
 
 // fetching data from https://spoonacular.com/food-api/ 
-function creatCard(muCardData){
+function creatCard(myCardData,index) {
+    let foodContainerDiv = $("#food-container")
+    let divEl = $("<div>")
+    divEl.addClass("col s2 m-6")
+    let cardDiv = $("<div>")
+    cardDiv.addClass("card")
+    let cardImgDiv = $("<div>")
+    cardImgDiv.addClass("card-image")
+    let imageEl = $("<img>")
+    imageEl.attr("src", myCardData[index].image)
+
+    let aEl = $("<a>")
+    aEl.addClass("btn-floating halfway-fab waves-effect waves-light red")
+    let iEl = $("<i>")
+    iEl.addClass("material-icons");
+    iEl.text("...")
+
+
+    let cardContentDiv = $("<div>")
+    cardContentDiv.addClass("card-content")
+
+    let pEl = $("<p>");
+    pEl.text(myCardData[index].title)
+
+    aEl.append(iEl)
+
+    cardImgDiv.append(imageEl)
+    cardImgDiv.append(aEl)
+
+    cardContentDiv.append(pEl)
+    cardDiv.append(cardImgDiv)
+    cardDiv.append(cardContentDiv)
+    divEl.append(cardDiv)
+    foodContainerDiv.append(divEl)
 
 }
 function getRecipeData() {
-    
+
     for (let i = 0; i < foodtype.length; i++) {
         requestUrlfoodRecipeIds = "https://api.spoonacular.com/recipes/complexSearch?query=" + foodtype[i] + "&apiKey=" + apiKey
         fetch(requestUrlfoodRecipeIds)
@@ -122,49 +163,38 @@ function getThemeRecipes(themeSelected, myidArray) {
     }
     return selectedIds;
 }
-// add the meal Recipe to the Theme 
-// function setRecipeforTheme(myidArray, myTheme) {
-//     // BBQ
-//     if (myTheme === "BBQ") {
-//         BBQ.push(getThemeRecipes("steak", myidArray))
-//         BBQ.push(getThemeRecipes("hamburger", myidArray))
-//         for (let i = 0; i < numberofRecipes; i++) {
-//             presentRecipe = pickRecipe(BBQ);
-//         }
-//         getURL(presentRecipe);
-//         console.log(presentRecipe)
 
-//     }
-// }
-function getURL(myPresentRecipe) {
-    let myData = "";
-    // let recipesURL="urlishere"
-    // for(let i=0;i<myPresentRecipe.length; i++){
-    // console.log(myPresentRecipe[i].id)
-    // myData=fetchURLfromID(myPresentRecipe[i].id)
-    // while(!myData){
+// function getURL(myPresentRecipe) {
+    // let myData = [];
+
+    // console.log(myPresentRecipe.length)
+    // myPresentRecipe.forEach(async function (currentItem) {
+    //     myData.push(fetchURLfromID(currentItem.id))
+    //     console.log("myData : " + myPresentRecipe.length)
+    //     console.log(myData)
+        // return;
 
     // }
 
-    ////////
-    console.log(myPresentRecipe.length)
-    myPresentRecipe.forEach(async function (currentItem) {
-        myData = await fetchURLfromID(currentItem.id)
-        console.log("hiiii"+myPresentRecipe.length)
-        console.log(myData)
-        return myData;
-        // myPresentRecipe[i].URL = myData.sourceUrl;
-        // myPresentRecipe[i].detail = "myData";
-    })
-
-    ///////
-    // console.log(myData)
-    //  myPresentRecipe[i].URL=myData.sourceUrl;
-
-    // console.log(myPresentRecipe[i])
-}
+    // )
+// return
 
 // }
+
+async function getURL(myPresentRecipe) {
+    let promises = [];
+
+    myPresentRecipe.forEach(function (currentItem) {
+        promises.push(fetchURLfromID(currentItem.id));
+    })
+
+    const values = await Promise.all(promises)
+    console.log("All the promise values:")
+    console.log(values)
+    return values
+}
+
+
 function pickRecipe(myRecepieArray) {
     let randomIndex;
     var numbers = [];
@@ -179,20 +209,12 @@ function pickRecipe(myRecepieArray) {
 
     }
     return presentRecipe;
-    // ///////
-    // var numbers = [];
-    // var randomnumber;
-    // do {
-    //     randomnumber = Math.floor(Math.random() * 999999) + 100000;
-    // } while (numbers.includes(randomnumber));
-    // numbers.push(randomnumber);
 
-    //////////
 }
 // TODO: creat all the Theme and food for it 
 
-function setRecipeforTheme(myidArray, myTheme) {
-
+async function setRecipeforTheme(myidArray, myTheme) {
+    let getUrlInfo = []
     if (myTheme === "BBQ") {
         BBQ.push(getThemeRecipes("sliders", myidArray))
         BBQ.push(getThemeRecipes("hamburger", myidArray))
@@ -201,9 +223,10 @@ function setRecipeforTheme(myidArray, myTheme) {
         for (let i = 0; i < numberofRecipes; i++) {
             presentRecipe = pickRecipe(BBQ);
         }
-        
+
         console.log(BBQ);
-        return (getURL(presentRecipe));
+        getUrlInfo = await getURL(presentRecipe)
+        return (getUrlInfo);
     }
     if (myTheme === "birthdayParty") {
         birthdayParty.push(getThemeRecipes("sliders", myidArray))
@@ -213,9 +236,10 @@ function setRecipeforTheme(myidArray, myTheme) {
         for (let i = 0; i < numberofRecipes; i++) {
             presentRecipe = pickRecipe(birthdayParty);
         }
-       
+
         console.log(birthdayParty);
-        return (getURL(presentRecipe));
+        getUrlInfo = await getURL(presentRecipe)
+        return (getUrlInfo);
     }
     if (myTheme === "engagementParty") {
         engagementParty.push(getThemeRecipes("sandwich", myidArray))
@@ -225,9 +249,10 @@ function setRecipeforTheme(myidArray, myTheme) {
         for (let i = 0; i < numberofRecipes; i++) {
             presentRecipe = pickRecipe(engagementParty);
         }
-       
+
         console.log(engagementParty);
-        return (getURL(presentRecipe));
+        getUrlInfo = await getURL(presentRecipe)
+        return (getUrlInfo);
     }
     if (myTheme === "dateNight") {
         dateNight.push(getThemeRecipes("pasta", myidArray))
@@ -237,9 +262,10 @@ function setRecipeforTheme(myidArray, myTheme) {
         for (let i = 0; i < numberofRecipes; i++) {
             presentRecipe = pickRecipe(dateNight);
         }
-     
+
         console.log(dateNight);
-        return (getURL(presentRecipe));
+        getUrlInfo = await getURL(presentRecipe)
+        return (getUrlInfo);
     }
     if (myTheme === "babyShower") {
         babyShower.push(getThemeRecipes("sandwhich", myidArray))
@@ -249,9 +275,10 @@ function setRecipeforTheme(myidArray, myTheme) {
         for (let i = 0; i < numberofRecipes; i++) {
             presentRecipe = pickRecipe(babyShower);
         }
-  
+
         console.log(babyShower);
-        return (getURL(presentRecipe));
+        getUrlInfo = await getURL(presentRecipe)
+        return (getUrlInfo);
     }
     if (myTheme === "brunch") {
         brunch.push(getThemeRecipes("pancakes", myidArray))
@@ -261,9 +288,10 @@ function setRecipeforTheme(myidArray, myTheme) {
         for (let i = 0; i < numberofRecipes; i++) {
             presentRecipe = pickRecipe(brunch);
         }
-    
+
         console.log(brunch);
-        return (getURL(presentRecipe));
+        getUrlInfo = await getURL(presentRecipe)
+        return (getUrlInfo);
     }
     if (myTheme === "dinnerParty") {
         dinnerParty.push(getThemeRecipes("steak", myidArray))
@@ -273,9 +301,10 @@ function setRecipeforTheme(myidArray, myTheme) {
         for (let i = 0; i < numberofRecipes; i++) {
             presentRecipe = pickRecipe(dinnerParty);
         }
-     
+
         console.log(dinnerParty);
-        return (getURL(presentRecipe));
+        getUrlInfo = await getURL(presentRecipe)
+        return (getUrlInfo);
     }
     if (myTheme === "thanksgiving") {
         thanksgiving.push(getThemeRecipes("casserole", myidArray))
@@ -285,9 +314,10 @@ function setRecipeforTheme(myidArray, myTheme) {
         for (let i = 0; i < numberofRecipes; i++) {
             presentRecipe = pickRecipe(thanksgiving);
         }
-       
+
         console.log(thanksgiving);
-        return (getURL(presentRecipe));
+        getUrlInfo = await getURL(presentRecipe)
+        return (getUrlInfo);
     }
     if (myTheme === "holiday") {
         holiday.push(getThemeRecipes("casserole", myidArray))
@@ -297,9 +327,10 @@ function setRecipeforTheme(myidArray, myTheme) {
         for (let i = 0; i < numberofRecipes; i++) {
             presentRecipe = pickRecipe(holiday);
         }
-       
+
         console.log(holiday);
-        return (getURL(presentRecipe));
+        getUrlInfo = await getURL(presentRecipe)
+        return (getUrlInfo);
     }
     if (myTheme === "generalParty") {
         generalParty.push(getThemeRecipes("pasta", myidArray))
@@ -309,9 +340,10 @@ function setRecipeforTheme(myidArray, myTheme) {
         for (let i = 0; i < numberofRecipes; i++) {
             presentRecipe = pickRecipe(generalParty);
         }
-       
+
         console.log(generalParty);
-        return (getURL(presentRecipe));
+        getUrlInfo = await getURL(presentRecipe)
+        return (getUrlInfo);
     }
 
 }

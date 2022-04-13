@@ -11,6 +11,9 @@ header{
   border: none;
   cursor: pointer;
 }
+#food-container{
+width: auto;
+}
 .row
 {
   /* border:5px solid #42a5f5;  */
