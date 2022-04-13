@@ -21,6 +21,36 @@
     <button id="savedEventsBtn">Saved Event(s)</button>
   </header>
   <main>
+
+
+    <!-- Modal Trigger -->
+    <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal ">
+      <div class="row">
+        <div class="img-content col s6">
+          <img id="image" src="" alt="">
+        </div>
+        <div class="modal-content col s6">
+          <h4 id="title">i dont kniw</h4>
+          <h4 id="readyTime">i dont kniw</h4>
+          <h5 class=" dish ">Dish Type:</h5>
+          <ul id="dishType"></ul>
+          <a id="urlLink" href="" target="_blanck">URL to Rec</a>
+          <h5 class="">Ingredients:</h5>
+          <ul id="ingredients"></ul>
+
+        </div>
+      </div>
+
+
+      <div class="modal-footer ">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">OK</a>
+      </div>
+    </div>
+
+
     <section id="initialContainer" class="container d-flex align-items-center ">
       <h4>What type of event are you planning?</43>
         <!-- Event type dropdown -->
@@ -54,6 +84,9 @@
         </div>
         <!--Submit Button  -->
         <button id="submitBtn">Submit</button>
+        <div class="progress">
+          <div class="indeterminate"></div>
+      </div>
     </section>
 
     <!-- carrd -->
