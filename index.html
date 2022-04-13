@@ -1,56 +1,50 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Compiled and minified CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
-    <!-- our style sheet link -->
-    <link rel="stylesheet" href="./assets/CSS/style.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <title>Socializer</title>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <body>
-    <header id="titleContainer" class="container center-align">
-      <h1>Socializer</h1>
-      <h3>Instructions</h3>
-      <button id="savedEventsBtn">Saved Event(s)</button>
-    </header>
-    <main>
-      <section id="initialContainer" class="container">
-        <h3>What type of event are you planning?</h3>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <!-- our style sheet link -->
+  <link rel="stylesheet" href="./assets/CSS/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <title>Socializer</title>
+</head>
+
+<body>
+  <header id="titleContainer" class="container center-align">
+    <h2>Socializer</h2>
+    <h3>Instructions</h3>
+    <button id="savedEventsBtn">Saved Event(s)</button>
+  </header>
+  <main>
+    <section id="initialContainer" class="container d-flex align-items-center ">
+      <h4>What type of event are you planning?</43>
         <!-- Event type dropdown -->
         <div class="input-field">
-          <select id = "eventFilter">
+          <select id="eventFilter">
             <option value="" disabled selected>Choose your option</option>
-            <option value="Birthday_Party">Birthday Party</option>
-            <option value="Engagement_Party">Engagement Party</option>
+            <option value="birthdayParty">Birthday Party</option>
+            <option value="engagementParty">Engagement Party</option>
             <option value="BBQ">BBQ</option>
-            <option value="Date_Night">Date Night</option>
-            <option value="Baby_Shower">Baby Shower</option>
-            <option value="Brunch">Brunch</option>
-            <option value="Dinner_Party">Dinner Party</option>
-            <option value="Thanksgiving">Thanksgiving</option>
-            <option value="Holiday">Holiday</option>
-            <option value="General_Party">General Party</option>
+            <option value="dateNight">Date Night</option>
+            <option value="babyShower">Baby Shower</option>
+            <option value="brunch">Brunch</option>
+            <option value="dinnerParty">Dinner Party</option>
+            <option value="thanksgiving">Thanksgiving</option>
+            <option value="holiday">Holiday</option>
+            <option value="generalParty">General Party</option>
           </select>
         </div>
 
-        <input
-          id="eventNameInput"
-          type="text"
-          placeholder="What do you want to name this event?"
-        />
+        <input id="eventNameInput" type="text" placeholder="What do you want to name this event?" />
 
         <!-- Alcohol Filter -->
         <div class="input-field">
-          <select id = "alchFilter">
+          <select id="alchFilter">
             <option value="" disabled selected>Choose your option</option>
             <option value="Inc_Alcohol">Include Alcohol</option>
             <option value="Dont_Inc">Don't Include</option>
@@ -58,15 +52,41 @@
           </select>
           <label>Include Alcohol?</label>
         </div>
-      </section>
-      <!--Submit Button  -->
-      <button id="submitBtn">Submit</button>
-    </main>
+        <!--Submit Button  -->
+        <button id="submitBtn">Submit</button>
+    </section>
 
-    <footer></footer>
+    <!-- carrd -->
+    <div class="row">
 
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="./assets/js/script.js"></script>
-  </body>
+      <!-- start dynamicly -->
+      <div class="col s2 m-6">
+        <div class="card">
+          <div class="card-image">
+            <img src="https://materializecss.com/images/sample-1.jpg">
+            <!-- <span class="card-title">Card Title</span> -->
+            <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+          </div>
+          <div class="card-content">
+            <p>Card Title</p>
+          </div>
+        </div>
+      </div>
+      <!-- end dynamic -->
+
+    </div>
+    <!-- carrd -->
+
+
+
+    <!-- end of card -->
+  </main>
+
+  <footer></footer>
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="./assets/js/script.js"></script>
+</body>
+
 </html>

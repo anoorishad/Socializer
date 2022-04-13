@@ -1,4 +1,8 @@
 
+header{
+  text-align: center;
+  background-color: #2980B9;
+}
 .dropbtn {
   background-color: #3498DB;
   color: white;
@@ -6,6 +10,13 @@
   font-size: 16px;
   border: none;
   cursor: pointer;
+}
+.row
+{
+  /* border:5px solid #42a5f5;  */
+  /* width: fit-content; */
+    /* height: fit-content;  */
+   /* margin-top:10px;  */
 }
 
 .dropbtn:hover, .dropbtn:focus {
@@ -37,3 +48,6 @@
 .dropdown a:hover {background-color: #ddd;}
 
 .show {display: block;}
+#initialContainer{
+width: 60vh;
+}
