@@ -41,8 +41,19 @@ submitBtn.on('click', function(){
     let cardData= setRecipeforTheme(idArray, themeSelection)
     creatCard(cardData)
 
+    resultPageLayout();
 })
 
+
+
+
+function resultPageLayout(){
+    var main = $("main");
+    main.attr("class", "row");
+    var initContainer = $("#initialContainer");
+    initContainer.addClass("col s3")
+}
+// getRecipeData();
 
 // dropdown initializer
 $(document).ready(function () {
