@@ -36,8 +36,12 @@ function resultPageLayout(){
     var main = $("main");
     main.attr("class", "row");
     var initContainer = $("#initialContainer");
+    // this needs to be a  class that will dynamically change on different screen sizes, right now it will always take up 1/3 the screen
     initContainer.addClass("col s3")
     initContainer.css("border-right", "1px solid black")
+    initContainer.css("min-height", "100vh")
+    var hidables = $(".hidable")
+    hidables.css("display", "none")
 }
 // getRecipeData();
 
