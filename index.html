@@ -5,7 +5,6 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
   <!-- our style sheet link -->
@@ -15,12 +14,19 @@
 </head>
 
 <body>
-  <header id="titleContainer" class="container center-align">
-    <h2>Socializer</h2>
-    <h3>Instructions</h3>
+  <header id="titleContainer"  >
+    <nav><h1><a href=".">Socializer</a></h1></nav>
+    
+    <section class="container center-align hidable">
+      <h3 class="hidable">Instructions</h3>
+      <p class="hidable">Struggling to connect with people after the pandemic has let you quarentine for a while? Socializer is here to help you setup an event and get back out there! Select a type of event, name it, and if Alcohol is acceptable, click submit, and get some drinks and recipes for your event!</p>
+  </section>
     <button id="savedEventsBtn">Saved Event(s)</button>
   </header>
   <main>
+
+    <section id="initialContainer" class="container">
+
 
 
     <!-- Modal Trigger -->
@@ -52,6 +58,7 @@
 
 
     <section id="initialContainer" class="container d-flex align-items-center ">
+
       <h4>What type of event are you planning?</43>
         <!-- Event type dropdown -->
         <div class="input-field">
@@ -76,18 +83,20 @@
         <div class="input-field">
           <select id="alchFilter">
             <option value="" disabled selected>Choose your option</option>
-            <option value="Inc_Alcohol">Include Alcohol</option>
-            <option value="Dont_Inc">Don't Include</option>
+            <option value="Inc_Alcohol">Only alcoholic</option>
+            <option value="Dont_Inc">No alcohol</option>
             <option value="Show_Both">Show Both</option>
           </select>
           <label>Include Alcohol?</label>
         </div>
         <!--Submit Button  -->
-        <button id="submitBtn">Submit</button>
+
+        <button id="submitBtn" class="btn waves-effect waves-light">Submit</button>
         <div class="progress">
           <div class="indeterminate"></div>
       </div>
     </section>
+
 
     <!-- carrd -->
     <div id="food-container" class="row">

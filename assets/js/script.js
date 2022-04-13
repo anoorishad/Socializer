@@ -89,13 +89,15 @@ submitBtn.on('click', async function () {
     console.log(themeSelection + " " + alchSelection + " " + eventNameSelection);
     getBevResults(alchSelection, themeSelection)
 
+
      cardData = await setRecipeforTheme(idArray, themeSelection)
     console.log("the card is:")
     console.log(cardData)
     for (let i = 0; i < cardData.length; i++) {
 
-        creatCard(cardData,i)
-    }
+
+    //     creatCard(cardData,i)
+    // }
 
 
 
@@ -113,7 +115,13 @@ function resultPageLayout() {
     var main = $("main");
     main.attr("class", "row");
     var initContainer = $("#initialContainer");
+    // this needs to be a  class that will dynamically change on different screen sizes, right now it will always take up 1/3 the screen
     initContainer.addClass("col s3")
+    initContainer.css("width", "500px")
+    initContainer.css("border-right", "1px solid black")
+    // initContainer.css("min-height", "100vh")
+    var hidables = $(".hidable")
+    hidables.css("display", "none")
 }
 // getRecipeData();
 
@@ -308,11 +316,11 @@ function pickRecipe(myRecepieArray) {
 
     for (let i = 0; i < myRecepieArray.length; i++) {
         do {
-
-            randomIndex = Math.floor(Math.random() * myRecepieArray[i].idRecipe.length);
+            console.log(myRecepieArray);
+            randomIndex = Math.floor(Math.random() * myRecepieArray.length);
         } while (numbers.includes(randomIndex));
         numbers.push(randomIndex);
-        presentRecipe.push(myRecepieArray[i].idRecipe[randomIndex])
+        presentRecipe.push(myRecepieArray[i])
 
     }
     return presentRecipe;
