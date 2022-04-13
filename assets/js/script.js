@@ -84,20 +84,19 @@ if (idArray.length === 0) {
 submitBtn.on('click', async function () {
     themeSelection = $('#eventFilter').val();
     alchSelection = $('#alchFilter').val();
-
     eventNameSelection = $('#eventNameInput').val();
+
     console.log(themeSelection + " " + alchSelection + " " + eventNameSelection);
     getBevResults(alchSelection, themeSelection)
 
-
-     cardData = await setRecipeforTheme(idArray, themeSelection)
+    cardData = await setRecipeforTheme(idArray, themeSelection)
     console.log("the card is:")
     console.log(cardData)
     for (let i = 0; i < cardData.length; i++) {
 
 
-    //     creatCard(cardData,i)
-    // }
+        creatCard(cardData,i)
+    }
 
 
 
