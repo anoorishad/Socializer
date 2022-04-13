@@ -4,9 +4,54 @@ let numberofRecipes = 2;
 let presentRecipe = [];
 let theme = "BBQ"
 let requestfoodRecipeURL;
+let requestBevURL;
+var bevSelectedIds = [];
 let foodtype = ["sliders", "hamburger", "BBQ", "salad", "pizza", "cake", "sandwhich",
     "casserole", "pasta", "steak", "roast", "pancakes", "eggs",
     "frittata", "tacos", "thanksgiving", "dessert"]
+let bevBirthdayParty = [
+    ['15086','11002','11007', '178368'],
+    ['12786', '12864', '13036', '12654']
+];
+let bevEngagementParty = [
+    ['11227','17255','15024','17210'],
+    ['12786','13036','12730','12670']
+];
+let bevBBQ = [
+    ['15675','17253','17207','11006'],
+    ['13036','12786','12670','12862']
+];
+let bevDateNight = [
+    ['11227','13020','12754','11938'],
+    ['12768','12786','12730','13036']
+];
+let bevBabyShower = [
+    ['14456', '17205', '11118', '11242'],
+    ['12670', '13036', '12710', '12862']
+];
+let bevBrunch = [
+    ['13621', '17205', '12162', '11113'],
+    ['12864', '13036', '12710', '12730']
+];
+let bevDinnerPary = [
+    ['11728', '11001', '14510', '11003'],
+    ['12738', '13036', '13032', '12670']
+];
+let bevThanksgiving = [
+    ['12188', '11728', '11001', '14510'],
+    ['12864', '12730', '12738', '13036']
+];
+let bevHoliday = [
+    ['12087', '12988', '11147', '13971'],
+    ['12738', '12864', '12730', '13032']
+];
+let bevGeneralParty = [
+    ['178353', '17204', '11424', '16275'],
+    ['12786', '12704', '12670', '13032']
+];
+
+
+
 let idArray = [];
 let birthdayParty = [];
 let engagementParty = [];
@@ -35,8 +80,10 @@ if (idArray.length === 0) {
 submitBtn.on('click', async function () {
     themeSelection = $('#eventFilter').val();
     alchSelection = $('#alchFilter').val();
+
     eventNameSelection = $('#eventNameInput').val();
     console.log(themeSelection + " " + alchSelection + " " + eventNameSelection);
+    getBevResults(alchSelection, themeSelection)
 
     let cardData = await setRecipeforTheme(idArray, themeSelection)
     console.log("the card is:")
@@ -52,7 +99,10 @@ submitBtn.on('click', async function () {
     resultPageLayout();
 })
 
-
+// dropdown initializer
+$(document).ready(function () {
+    $('select').formSelect();
+});
 
 
 function resultPageLayout() {
@@ -63,10 +113,6 @@ function resultPageLayout() {
 }
 // getRecipeData();
 
-// dropdown initializer
-$(document).ready(function () {
-    $('select').formSelect();
-});
 
 
 // fetching data from https://spoonacular.com/food-api/ 
@@ -348,3 +394,104 @@ async function setRecipeforTheme(myidArray, myTheme) {
 
 }
 
+function getBevResults(alcChoice,theme){
+   console.log(alcChoice);
+   var alcoholic = 0;
+   var nonAlc = 1;
+   var drinkTheme;
+   var alcTemp = [];
+   var nonAlcTemp = [];
+
+   switch (theme) {
+       case 'birthdayParty':
+           drinkTheme=bevBirthdayParty;
+           break;
+       case 'engagementParty':
+           drinkTheme=bevEngagementParty;
+           break;
+       case 'BBQ':
+           drinkTheme=bevBBQ;
+           
+           break;
+       case 'dateNight':
+           drinkTheme=bevDateNight;
+           break;
+        case 'babyShower':
+            drinkTheme=bevBabyShower;
+            break;
+        case 'brunch':
+            drinkTheme=bevBrunch;
+            break;
+        case 'dinnerParty':
+            drinkTheme=bevDinnerPary;
+            
+            break;
+        case 'thanksgiving':
+            drinkTheme=bevThanksgiving;
+            break;
+        case 'holiday':
+            drinkTheme=bevHoliday;
+            break;
+        case 'generalParty':
+            drinkTheme=bevGeneralParty;
+            break;
+   
+       default:
+           break;
+   }
+
+
+
+    if (alcChoice === "Inc_Alcohol") {
+        for (let i = 0; i < drinkTheme[alcoholic].length; i++) {
+            fetchBevURLfromID(drinkTheme[alcoholic][i]);
+            bevSelectedIds.push(drinkTheme[alcoholic][i]);
+            
+        }
+    } 
+    if (alcChoice === "Dont_Inc") {
+        for (let i = 0; i < drinkTheme[nonAlc].length; i++) {
+            fetchBevURLfromID(drinkTheme[nonAlc][i])
+            bevSelectedIds.push(drinkTheme[nonAlc][i]);
+        }
+
+    }
+    if (alcChoice === "Show_Both") {
+        for (let i = 0; i < drinkTheme[alcoholic].length; i++) {
+            fetchBevURLfromID(drinkTheme[alcoholic][i]);
+            alcTemp.push(drinkTheme[alcoholic][i]);
+            
+        }
+        for (let i = 0; i < drinkTheme[nonAlc].length; i++) {
+            fetchBevURLfromID(drinkTheme[nonAlc][i]);
+            nonAlcTemp.push(drinkTheme[nonAlc][i]);
+        }
+        bevSelectedIds= alcTemp.concat(nonAlcTemp);
+
+    }
+    console.log(bevSelectedIds);
+
+}
+
+
+function fetchBevURLfromID(idDrink) {
+        requestBevURL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + idDrink
+        console.log(idDrink);
+       fetch(requestBevURL)
+            .then(function (response) {
+               return response.json();
+            })
+            .then(function (data) {
+                console.log(data.drinks[0].strDrink)
+                console.log(data.drinks[0].strDrinkThumb)
+            });
+        
+    };
+fetchBevURLfromID()
+
+
+
+
+// write a function that passes theme through as a parameter. pass through a bollean (true,false alc, no alc, both) if statement value = no alcohol call this function, pass theme through as a parameter
+
+// themeSelection = $('#eventFilter').val();
