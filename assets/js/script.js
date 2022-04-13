@@ -37,6 +37,7 @@ function resultPageLayout(){
     main.attr("class", "row");
     var initContainer = $("#initialContainer");
     initContainer.addClass("col s3")
+    initContainer.css("border-right", "1px solid black")
 }
 // getRecipeData();
 

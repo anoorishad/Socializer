@@ -18,8 +18,9 @@
 
   <body>
     <header id="titleContainer" class="container center-align">
-      <h1><a>Socializer</a></h1>
+      <h1><a href=".">Socializer</a></h1>
       <h3>Instructions</h3>
+      <p>Struggling to conncect with people after the pandemic has let you quarentine for a while? Socializer is here to help you setup an event and get back out there! Select a type of event, name it, and if Alcohol is acceptable, click submit, and get some drinks and recipes for your event!</p>
       <button id="savedEventsBtn">Saved Event(s)</button>
     </header>
     <main>
@@ -52,14 +53,14 @@
         <div class="input-field">
           <select id = "alchFilter">
             <option value="" disabled selected>Choose your option</option>
-            <option value="Inc_Alcohol">Include Alcohol</option>
-            <option value="Dont_Inc">Don't Include</option>
+            <option value="Inc_Alcohol">Only alcoholic</option>
+            <option value="Dont_Inc">No alcohol</option>
             <option value="Show_Both">Show Both</option>
           </select>
           <label>Include Alcohol?</label>
         </div>
         <!--Submit Button  -->
-        <button id="submitBtn">Submit</button>
+        <button id="submitBtn" class="btn waves-effect waves-light">Submit</button>
       </section>
     </main>
 
