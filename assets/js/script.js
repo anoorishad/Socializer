@@ -1,13 +1,62 @@
-let apiKey = "56cebe6bd237404a8ea46d129f5bd93c";
+let apiKey = "e4643a8f809a46d094d058b8af3ae381";
 let numberofRecipes = 2;
-
+let foodContainerDiv = $("#food-container")
 let presentRecipe = [];
 let theme = "BBQ"
 let requestfoodRecipeURL;
+let requestBevURL;
+var bevSelectedIds = [];
 let foodtype = ["sliders", "hamburger", "BBQ", "salad", "pizza", "cake", "sandwhich",
     "casserole", "pasta", "steak", "roast", "pancakes", "eggs",
     "frittata", "tacos", "thanksgiving", "dessert"]
+
+let bevBirthdayParty = [
+    ['15086','11002','11007', '178368'],
+    ['12786', '12864', '13036', '12654']
+];
+let bevEngagementParty = [
+    ['11227','17255','15024','17210'],
+    ['12786','13036','12730','12670']
+];
+let bevBBQ = [
+    ['15675','17253','17207','11006'],
+    ['13036','12786','12670','12862']
+];
+let bevDateNight = [
+    ['11227','13020','12754','11938'],
+    ['12768','12786','12730','13036']
+];
+let bevBabyShower = [
+    ['14456', '17205', '11118', '11242'],
+    ['12670', '13036', '12710', '12862']
+];
+let bevBrunch = [
+    ['13621', '17205', '12162', '11113'],
+    ['12864', '13036', '12710', '12730']
+];
+let bevDinnerPary = [
+    ['11728', '11001', '14510', '11003'],
+    ['12738', '13036', '13032', '12670']
+];
+let bevThanksgiving = [
+    ['12188', '11728', '11001', '14510'],
+    ['12864', '12730', '12738', '13036']
+];
+let bevHoliday = [
+    ['12087', '12988', '11147', '13971'],
+    ['12738', '12864', '12730', '13032']
+];
+let bevGeneralParty = [
+    ['178353', '17204', '11424', '16275'],
+    ['12786', '12704', '12670', '13032']
+];
+
+
+
+
 let idArray = [];
+// include all recepies for specific theme
+let cardData =[];
 let birthdayParty = [];
 let engagementParty = [];
 let BBQ = [];
@@ -35,13 +84,17 @@ if (idArray.length === 0) {
 submitBtn.on('click', async function () {
     themeSelection = $('#eventFilter').val();
     alchSelection = $('#alchFilter').val();
+
     eventNameSelection = $('#eventNameInput').val();
     console.log(themeSelection + " " + alchSelection + " " + eventNameSelection);
+    getBevResults(alchSelection, themeSelection)
 
-    // let cardData = await setRecipeforTheme(idArray, themeSelection)
-    // console.log("the card is:")
-    // console.log(cardData)
-    // for (let i = 0; i < 8; i++) {
+
+     cardData = await setRecipeforTheme(idArray, themeSelection)
+    console.log("the card is:")
+    console.log(cardData)
+    for (let i = 0; i < cardData.length; i++) {
+
 
     //     creatCard(cardData,i)
     // }
@@ -52,7 +105,10 @@ submitBtn.on('click', async function () {
     resultPageLayout();
 })
 
-
+// dropdown initializer
+$(document).ready(function () {
+    $('select').formSelect();
+});
 
 
 function resultPageLayout() {
@@ -69,16 +125,67 @@ function resultPageLayout() {
 }
 // getRecipeData();
 
-// dropdown initializer
+
 $(document).ready(function () {
     $('select').formSelect();
 });
+// modal
 
+// food target
+foodContainerDiv.on("click",".dataInfo",function(event){
+    event.preventDefault();
+    console.log(event.target)
+    let moreInfobtnID =($(event.target).attr("data-info"))
+    console.log(cardData)
+    $('.modal').modal();
+    // $("#text").text(cardData[0].title)
+    for (let i = 0; i < cardData.length; i++) {
+            if (cardData[i].id == moreInfobtnID) {
+                $("#image").attr("src",cardData[i].image)
+                $("#title").text(cardData[i].title)
+
+                $("#readyTime").text("Ready Time: "+ cardData[i].readyInMinutes + " Minutes")
+                // $("#readyTime").text("Ready Time:" )
+                for (let j = 0; j < cardData[i].dishTypes.length; j++) {
+                    let liEl = $("<li>")
+                        liEl.text(cardData[i].dishTypes[j])
+    
+                    $("#dishType").append(liEl)
+                    // $(".modal").append($("#dishType"))
+                
+                }
+                $("#urlLink").attr("href",cardData[i].sourceUrl)
+                $("#urlLink").text("URL is: "+ cardData[i].sourceUrl)
+
+                for (let k = 0; k < cardData[i].extendedIngredients.length; k++) {
+                    let liIngEl = $("<li>")
+                    liIngEl.text(cardData[i].extendedIngredients[k].name)
+    
+                    $("#ingredients").append(liIngEl)
+                    // $(".modal").append($("#ingredients"))
+                
+                }                
+
+    
+            }
+            }
+})
+// if(cardData.length !=0){
+
+
+$(document).ready(function(){
+    // $('.modal').modal();
+    // $("#text").text(cardData[0].title)
+//     
+    // }
+  });
+// }
 
 // fetching data from https://spoonacular.com/food-api/ 
 function creatCard(myCardData,index) {
-    let foodContainerDiv = $("#food-container")
+    
     let divEl = $("<div>")
+    
     divEl.addClass("col s2 m-6")
     let cardDiv = $("<div>")
     cardDiv.addClass("card")
@@ -90,7 +197,9 @@ function creatCard(myCardData,index) {
     let aEl = $("<a>")
     aEl.addClass("btn-floating halfway-fab waves-effect waves-light red")
     let iEl = $("<i>")
-    iEl.addClass("material-icons");
+    iEl.addClass("dataInfo material-icons btn modal-trigger");
+    iEl.attr("data-info", myCardData[index].id)
+    iEl.attr("data-target","modal1")
     iEl.text("...")
 
 
@@ -354,3 +463,104 @@ async function setRecipeforTheme(myidArray, myTheme) {
 
 }
 
+function getBevResults(alcChoice,theme){
+   console.log(alcChoice);
+   var alcoholic = 0;
+   var nonAlc = 1;
+   var drinkTheme;
+   var alcTemp = [];
+   var nonAlcTemp = [];
+
+   switch (theme) {
+       case 'birthdayParty':
+           drinkTheme=bevBirthdayParty;
+           break;
+       case 'engagementParty':
+           drinkTheme=bevEngagementParty;
+           break;
+       case 'BBQ':
+           drinkTheme=bevBBQ;
+           
+           break;
+       case 'dateNight':
+           drinkTheme=bevDateNight;
+           break;
+        case 'babyShower':
+            drinkTheme=bevBabyShower;
+            break;
+        case 'brunch':
+            drinkTheme=bevBrunch;
+            break;
+        case 'dinnerParty':
+            drinkTheme=bevDinnerPary;
+            
+            break;
+        case 'thanksgiving':
+            drinkTheme=bevThanksgiving;
+            break;
+        case 'holiday':
+            drinkTheme=bevHoliday;
+            break;
+        case 'generalParty':
+            drinkTheme=bevGeneralParty;
+            break;
+   
+       default:
+           break;
+   }
+
+
+
+    if (alcChoice === "Inc_Alcohol") {
+        for (let i = 0; i < drinkTheme[alcoholic].length; i++) {
+            fetchBevURLfromID(drinkTheme[alcoholic][i]);
+            bevSelectedIds.push(drinkTheme[alcoholic][i]);
+            
+        }
+    } 
+    if (alcChoice === "Dont_Inc") {
+        for (let i = 0; i < drinkTheme[nonAlc].length; i++) {
+            fetchBevURLfromID(drinkTheme[nonAlc][i])
+            bevSelectedIds.push(drinkTheme[nonAlc][i]);
+        }
+
+    }
+    if (alcChoice === "Show_Both") {
+        for (let i = 0; i < drinkTheme[alcoholic].length; i++) {
+            fetchBevURLfromID(drinkTheme[alcoholic][i]);
+            alcTemp.push(drinkTheme[alcoholic][i]);
+            
+        }
+        for (let i = 0; i < drinkTheme[nonAlc].length; i++) {
+            fetchBevURLfromID(drinkTheme[nonAlc][i]);
+            nonAlcTemp.push(drinkTheme[nonAlc][i]);
+        }
+        bevSelectedIds= alcTemp.concat(nonAlcTemp);
+
+    }
+    console.log(bevSelectedIds);
+
+}
+
+
+function fetchBevURLfromID(idDrink) {
+        requestBevURL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + idDrink
+        console.log(idDrink);
+       fetch(requestBevURL)
+            .then(function (response) {
+               return response.json();
+            })
+            .then(function (data) {
+                console.log(data.drinks[0].strDrink)
+                console.log(data.drinks[0].strDrinkThumb)
+            });
+        
+    };
+fetchBevURLfromID()
+
+
+
+
+// write a function that passes theme through as a parameter. pass through a bollean (true,false alc, no alc, both) if statement value = no alcohol call this function, pass theme through as a parameter
+
+// themeSelection = $('#eventFilter').val();
