@@ -463,7 +463,7 @@ async function setRecipeforTheme(myidArray, myTheme) {
 }
 
 function getBevResults(alcChoice,theme){
-   console.log(alcChoice);
+   
    var alcoholic = 0;
    var nonAlc = 1;
    var drinkTheme;
@@ -537,14 +537,14 @@ function getBevResults(alcChoice,theme){
         bevSelectedIds= alcTemp.concat(nonAlcTemp);
 
     }
-    console.log(bevSelectedIds);
+ 
 
 }
 
 
 function fetchBevURLfromID(idDrink) {
         requestBevURL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + idDrink
-        console.log(idDrink);
+
        fetch(requestBevURL)
             .then(function (response) {
                return response.json();
@@ -552,10 +552,14 @@ function fetchBevURLfromID(idDrink) {
             .then(function (data) {
                 console.log(data.drinks[0].strDrink)
                 console.log(data.drinks[0].strDrinkThumb)
+                
+                // this may not be neccesarry
+                //fetchBevURLfromID()
+                
             });
         
     };
-fetchBevURLfromID()
+
 
 
 
