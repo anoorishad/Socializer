@@ -1,6 +1,6 @@
-let apiKey = "46190e98b59f49d2b3a2b3ba7fbe999e";
+let apiKey = "21365b6c3a364bcfaf6a0a422fdff0cf";
 let numberofRecipes = 8;
-let foodContainerDiv = $("#food-container")
+let foodContainerDiv = $(".food-container")
 let presentRecipe = [];
 let theme = "BBQ"
 let requestfoodRecipeURL;
@@ -73,7 +73,7 @@ var eventNameSelection = $('#eventNameInput');
 setlocalStorage();
 function setlocalStorage() {
     if (JSON.parse(localStorage.getItem("bbq")) === null) {
-        localStorage.setItem("dateNight", JSON.stringify(BBQInfo));
+        localStorage.setItem("bbq", JSON.stringify(BBQInfo));
     }
     if (JSON.parse(localStorage.getItem("birthdayParty")) === null) {
         localStorage.setItem("birthdayParty", JSON.stringify(birthdayPartyInfo));
@@ -109,14 +109,17 @@ function setlocalStorage() {
     }
 }
 
-  
+
 // get the informationfrom local array
 idArray = JSON.parse(localStorage.getItem("allRecipe"))
 // saghar fix here
 if (idArray[0].idRecipe.length === 0) {
     getRecipeData();
 }
+
+// submit button
 submitBtn.on('click', async function () {
+    reset();
     themeSelection = $('#eventFilter').val();
     alchSelection = $('#alchFilter').val();
 
@@ -134,9 +137,6 @@ submitBtn.on('click', async function () {
         }
     }
 
-
-
-
     resultPageLayout();
 })
 
@@ -144,7 +144,12 @@ submitBtn.on('click', async function () {
 $(document).ready(function () {
     $('select').formSelect();
 });
+function reset() {
 
+    foodContainerDiv.empty();
+    cardData = [];
+
+}
 
 function resultPageLayout() {
     var main = $("main");
@@ -221,7 +226,7 @@ function creatCard(myCardData, index) {
 
     let divEl = $("<div>")
 
-    divEl.addClass("col s2 m-6")
+    divEl.addClass("showDard col s2 m-6")
     let cardDiv = $("<div>")
     cardDiv.addClass("card")
     let cardImgDiv = $("<div>")
@@ -321,10 +326,13 @@ async function getURL(myPresentRecipe) {
     let promises = [];
 
     myPresentRecipe.forEach(function (currentItem) {
-        for(let i=0; i<currentItem.length; i++){
+        if(currentItem != null){
+            for (let i = 0; i < currentItem.length; i++) {
                 console.log(currentItem[i].id)
-        promises.push(fetchURLfromID(currentItem[i].id));
-    } 
+                promises.push(fetchURLfromID(currentItem[i].id));
+            }
+        }
+        
     })
 
     const values = await Promise.all(promises)
@@ -366,6 +374,7 @@ async function setRecipeforTheme(myidArray, myTheme) {
     let generalParty = [];
 
     if (myTheme === "BBQ") {
+        BBQInfo = JSON.parse(localStorage.getItem("bbq"))
         if (BBQInfo.length == 0) {
             presentRecipe = []
             BBQ.push(getThemeRecipes("sliders", myidArray).idRecipe)
@@ -377,144 +386,142 @@ async function setRecipeforTheme(myidArray, myTheme) {
             BBQInfo = await getURL(BBQ)
             localStorage.setItem("bbq", JSON.stringify(BBQInfo));
         }
-        
-            presentRecipe = pickRecipe(BBQInfo);
-        
+
+        presentRecipe = pickRecipe(BBQInfo);
+
         return (presentRecipe);
 
     }
     if (myTheme === "birthdayParty") {
+        birthdayPartyInfo = JSON.parse(localStorage.getItem("birthdayParty"))
         if (birthdayPartyInfo.length == 0) {
             presentRecipe = []
-            birthdayParty.push(getThemeRecipes("sliders", myidArray))
-            birthdayParty.push(getThemeRecipes("pizza", myidArray))
-            birthdayParty.push(getThemeRecipes("cake", myidArray))
-            birthdayParty.push(getThemeRecipes("salad", myidArray))
+            birthdayParty.push(getThemeRecipes("sliders", myidArray).idRecipe)
+            birthdayParty.push(getThemeRecipes("pizza", myidArray).idRecipe)
+            birthdayParty.push(getThemeRecipes("cake", myidArray).idRecipe)
+            birthdayParty.push(getThemeRecipes("salad", myidArray).idRecipe)
             birthdayPartyInfo = await getURL(birthdayParty)
             localStorage.setItem("birthdayParty", JSON.stringify(birthdayPartyInfo));
         }
-        for (let i = 0; i < numberofRecipes; i++) {
-            presentRecipe = pickRecipe(birthdayPartyInfo);
-        }
 
-        // console.log(presentRecipe);
+        presentRecipe = pickRecipe(birthdayPartyInfo);
 
         return (presentRecipe);
     }
     if (myTheme === "engagementParty") {
+        engagementPartyInfo = JSON.parse(localStorage.getItem("engagementParty"))
         if (engagementPartyInfo.length == 0) {
             presentRecipe = []
-            engagementParty.push(getThemeRecipes("sandwich", myidArray))
-            engagementParty.push(getThemeRecipes("salad", myidArray))
-            engagementParty.push(getThemeRecipes("cake", myidArray))
-            engagementParty.push(getThemeRecipes("casserole", myidArray))
+            engagementParty.push(getThemeRecipes("sandwich", myidArray).idRecipe)
+            engagementParty.push(getThemeRecipes("salad", myidArray).idRecipe)
+            engagementParty.push(getThemeRecipes("cake", myidArray).idRecipe)
+            engagementParty.push(getThemeRecipes("casserole", myidArray).idRecipe)
             engagementPartyInfo = await getURL(engagementParty)
             localStorage.setItem("engagementParty", JSON.stringify(engagementPartyInfo));
         }
-        for (let i = 0; i < numberofRecipes; i++) {
-            presentRecipe = pickRecipe(engagementPartyInfo);
-        }
-
+        presentRecipe = pickRecipe(engagementPartyInfo);
         return (presentRecipe);
     }
     if (myTheme === "dateNight") {
+        dateNightInfo = JSON.parse(localStorage.getItem("dateNight"))
         if (dateNightInfo.length == 0) {
             presentRecipe = []
-            dateNight.push(getThemeRecipes("pasta", myidArray))
-            dateNight.push(getThemeRecipes("salad", myidArray))
-            dateNight.push(getThemeRecipes("steak", myidArray))
-            dateNight.push(getThemeRecipes("roast", myidArray))
+            dateNight.push(getThemeRecipes("pasta", myidArray).idRecipe)
+            dateNight.push(getThemeRecipes("salad", myidArray).idRecipe)
+            dateNight.push(getThemeRecipes("steak", myidArray).idRecipe)
+            dateNight.push(getThemeRecipes("roast", myidArray).idRecipe)
             dateNightInfo = await getURL(dateNight)
             localStorage.setItem("dateNight", JSON.stringify(dateNightInfo));
         }
-        for (let i = 0; i < numberofRecipes; i++) {
-            presentRecipe = pickRecipe(dateNightInfo);
-        }
+
+        presentRecipe = pickRecipe(dateNightInfo);
+
         return (presentRecipe);
     }
     if (myTheme === "babyShower") {
+        babyShowerInfo = JSON.parse(localStorage.getItem("babyShower"))
         if (babyShowerInfo.length == 0) {
             presentRecipe = []
-            babyShower.push(getThemeRecipes("sandwhich", myidArray))
-            babyShower.push(getThemeRecipes("salad", myidArray))
-            babyShower.push(getThemeRecipes("steak", myidArray))
-            babyShower.push(getThemeRecipes("roast", myidArray))
+            babyShower.push(getThemeRecipes("sandwhich", myidArray).idRecipe)
+            babyShower.push(getThemeRecipes("salad", myidArray).idRecipe)
+            babyShower.push(getThemeRecipes("steak", myidArray).idRecipe)
+            babyShower.push(getThemeRecipes("roast", myidArray).idRecipe)
             babyShowerInfo = await getURL(babyShower)
             localStorage.setItem("babyShower", JSON.stringify(babyShowerInfo))
         }
-        for (let i = 0; i < numberofRecipes; i++) {
-            presentRecipe = pickRecipe(babyShowerInfo);
-        }
+        presentRecipe = pickRecipe(babyShowerInfo);
+
         return (presentRecipe);
     }
     if (myTheme === "brunch") {
+        brunchInfo = JSON.parse(localStorage.getItem("brunch"))
         if (brunchInfo.length == 0) {
 
             presentRecipe = []
-            brunch.push(getThemeRecipes("pancakes", myidArray))
-            brunch.push(getThemeRecipes("eggs", myidArray))
-            brunch.push(getThemeRecipes("frittata", myidArray))
-            brunch.push(getThemeRecipes("salad", myidArray))
+            brunch.push(getThemeRecipes("pancakes", myidArray).idRecipe)
+            brunch.push(getThemeRecipes("eggs", myidArray).idRecipe)
+            brunch.push(getThemeRecipes("frittata", myidArray).idRecipe)
+            brunch.push(getThemeRecipes("salad", myidArray).idRecipe)
             brunchInfo = await getURL(brunchInfo)
             localStorage.setItem("brunch", JSON.stringify(brunchInfo))
         }
-        for (let i = 0; i < numberofRecipes; i++) {
-            presentRecipe = pickRecipe(brunchInfo);
-        }
+
+        presentRecipe = pickRecipe(brunchInfo);
+
 
 
         return (presentRecipe);
     }
     if (myTheme === "dinnerParty") {
+        dinnerPartyInfo = JSON.parse(localStorage.getItem("dinnerParty"))
         if (dinnerPartyInfo.length == 0) {
             presentRecipe = []
-            dinnerParty.push(getThemeRecipes("steak", myidArray))
-            dinnerParty.push(getThemeRecipes("salad", myidArray))
-            dinnerParty.push(getThemeRecipes("pasta", myidArray))
-            dinnerParty.push(getThemeRecipes("tacos", myidArray))
+            dinnerParty.push(getThemeRecipes("steak", myidArray).idRecipe)
+            dinnerParty.push(getThemeRecipes("salad", myidArray).idRecipe)
+            dinnerParty.push(getThemeRecipes("pasta", myidArray).idRecipe)
+            dinnerParty.push(getThemeRecipes("tacos", myidArray).idRecipe)
 
             dinnerPartyInfo = await getURL(dinnerParty)
             localStorage.setItem("dinnerParty", JSON.stringify(dinnerPartyInfo))
         }
-        for (let i = 0; i < numberofRecipes; i++) {
-            presentRecipe = pickRecipe(dinnerPartyInfo);
-        }
-
-
+        presentRecipe = pickRecipe(dinnerPartyInfo);
         return (presentRecipe);
     }
     if (myTheme === "thanksgiving") {
+        thanksgivingInfo = JSON.parse(localStorage.getItem("thanksgiving"))
         if (thanksgivingInfo.length == 0) {
             presentRecipe = []
-            thanksgiving.push(getThemeRecipes("casserole", myidArray))
-            thanksgiving.push(getThemeRecipes("thanksgiving", myidArray))
-            thanksgiving.push(getThemeRecipes("roast", myidArray))
-            thanksgiving.push(getThemeRecipes("dessert", myidArray))
+            thanksgiving.push(getThemeRecipes("casserole", myidArray).idRecipe)
+            thanksgiving.push(getThemeRecipes("thanksgiving", myidArray).idRecipe)
+            thanksgiving.push(getThemeRecipes("roast", myidArray).idRecipe)
+            thanksgiving.push(getThemeRecipes("dessert", myidArray).idRecipe)
 
             thanksgivingInfo = await getURL(thanksgiving)
             localStorage.setItem("thanksgiving", JSON.stringify(thanksgivingInfo))
         }
-        for (let i = 0; i < numberofRecipes; i++) {
-            presentRecipe = pickRecipe(thanksgivingInfo);
-        }
+
+        presentRecipe = pickRecipe(thanksgivingInfo);
+
         return (presentRecipe);
     }
     if (myTheme === "holiday") {
+        holidayInfo = JSON.parse(localStorage.getItem("holiday"))
         if (holidayInfo.concat.length == 0) {
             presentRecipe = []
-            holiday.push(getThemeRecipes("casserole", myidArray))
-            holiday.push(getThemeRecipes("salad", myidArray))
-            holiday.push(getThemeRecipes("roast", myidArray))
-            holiday.push(getThemeRecipes("dessert", myidArray))
+            holiday.push(getThemeRecipes("casserole", myidArray).idRecipe)
+            holiday.push(getThemeRecipes("salad", myidArray).idRecipe)
+            holiday.push(getThemeRecipes("roast", myidArray).idRecipe)
+            holiday.push(getThemeRecipes("dessert", myidArray).idRecipe)
             holidayInfo = await getURL(holiday)
             localStorage.setItem("holiday", JSON.stringify(holidayInfo))
         }
-        for (let i = 0; i < numberofRecipes; i++) {
-            presentRecipe = pickRecipe(holidayInfo);
-        }
+
+        presentRecipe = pickRecipe(holidayInfo);
+
         return (presentRecipe);
     }
     if (myTheme === "generalParty") {
+        generalPartyInfo = JSON.parse(localStorage.getItem("generalParty"))
         if (generalPartyInfo.length == 0) {
             presentRecipe = []
             generalParty.push(getThemeRecipes("pasta", myidArray))
@@ -524,10 +531,10 @@ async function setRecipeforTheme(myidArray, myTheme) {
             generalPartyInfo = await getURL(generalParty)
             localStorage.setItem("generalParty", JSON.stringify(generalPartyInfo))
         }
-        for (let i = 0; i < numberofRecipes; i++) {
-            presentRecipe = pickRecipe(generalPartyInfo);
-        }
-        return (presentRecipe);
+
+        presentRecipe = pickRecipe(generalPartyInfo);
+        return (presentRecipe)
+
     }
 
 }
