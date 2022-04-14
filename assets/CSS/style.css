@@ -26,21 +26,13 @@ li,ul{
   /* display: flex;
   flex-direction: column; */
 }
-.row
-{
-  /* border:5px solid #42a5f5;  */
-  /* width: fit-content; */
-    /* height: fit-content;  */
-   /* margin-top:10px;  */
+.modal-footer{
+height: fit-content;
 }
 .modal-content{
-  padding-left: 10px;
+  padding: 20px;
 }
-.modal{
-  
-  /* height:max-content; */
-  /* margin: 20px; */
-}
+
 .dropbtn:hover, .dropbtn:focus {
   background-color: #2980B9;
 }
