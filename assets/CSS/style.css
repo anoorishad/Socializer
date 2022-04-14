@@ -38,8 +38,7 @@ li,ul{
 }
 .modal{
   
-  /* height:max-content; */
-  /* margin: 20px; */
+visibility: hidden;
 }
 .dropbtn:hover, .dropbtn:focus {
   background-color: #2980B9;
