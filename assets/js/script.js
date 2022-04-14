@@ -13,7 +13,7 @@ let foodtype = ["sliders", "hamburger", "BBQ", "salad", "pizza", "cake", "sandwh
 
 
 let bevBirthdayParty = [
-    ['15086', '11002', '11007', '178368'],
+    ['15086', '11002', '17255', '178368'],
     ['12786', '12864', '13036', '12654']
 ];
 let bevEngagementParty = [
@@ -54,7 +54,6 @@ let bevGeneralParty = [
 ];
 
 let idArray = [];
-// include all recepies for specific theme
 let cardData = [];
 let bevCardData = [];
 let birthdayPartyInfo = [];
@@ -105,7 +104,6 @@ function setlocalStorage() {
         localStorage.setItem("generalParty", JSON.stringify(generalPartyInfo));
     }
 
-
     if (JSON.parse(localStorage.getItem("allRecipe")) === null) {
         localStorage.setItem("allRecipe", JSON.stringify(idArray));
     }
@@ -150,6 +148,7 @@ $(document).ready(function () {
 function reset() {
 
     foodContainerDiv.empty();
+    bevContainerDiv.empty();
     cardData = [];
     presentRecipe=[];
 
@@ -681,7 +680,7 @@ function fetchBevURLfromID(idDrink) {
     
     }
 // drink modal
-    bevContainerDiv.on("click",".dataInfo",function(event){
+bevContainerDiv.on("click",".dataInfo",function(event){
         event.preventDefault();
 
         console.log(event.target)
@@ -783,4 +782,13 @@ function fetchBevURLfromID(idDrink) {
         $('#bevModal').modal();
 
              });
-         
+
+
+bevContainerDiv.on("click",".card",function(event) {
+    console.log("card clicked")
+
+});
+
+
+
+
