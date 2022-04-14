@@ -541,7 +541,6 @@ async function setRecipeforTheme(myidArray, myTheme) {
 
 
 function getBevResults(alcChoice,theme){
-   
    var alcoholic = 0;
    var nonAlc = 1;
    var drinkTheme;
@@ -616,7 +615,6 @@ function getBevResults(alcChoice,theme){
         bevSelectedIds = alcTemp.concat(nonAlcTemp);
 
     }
- 
 
 }
 
@@ -624,7 +622,6 @@ function getBevResults(alcChoice,theme){
 function fetchBevURLfromID(idDrink) {
 
         requestBevURL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + idDrink
-
        fetch(requestBevURL)
             .then(function (response) {
                return response.json();
@@ -632,17 +629,91 @@ function fetchBevURLfromID(idDrink) {
             .then(function (data) {
                 console.log(data.drinks[0].strDrink)
                 console.log(data.drinks[0].strDrinkThumb)
-                
-                // this may not be neccesarry
-                //fetchBevURLfromID()
-                
+                creatBevCard(data.drinks,0);
             });
         
     };
 
+    function creatBevCard(myCardData,index) {
+        console.log(myCardData);
+    
+        let divEl = $("<div>")
+        
+        divEl.addClass("col s2 m-6")
+        let cardDiv = $("<div>")
+        cardDiv.addClass("card")
+        let cardImgDiv = $("<div>")
+        cardImgDiv.addClass("card-image")
+        let imageEl = $("<img>")
+        imageEl.attr("src",myCardData[index].strDrinkThumb)
 
-
-
+    
+        let aEl = $("<a>")
+        aEl.addClass("btn-floating halfway-fab waves-effect waves-light red")
+        let iEl = $("<i>")
+        iEl.addClass("dataInfo material-icons btn modal-trigger");
+        iEl.attr("data-info", myCardData[index].idDrink)
+        iEl.attr("data-target","modal1")
+        iEl.text("...")
+    
+    
+        let cardContentDiv = $("<div>")
+        cardContentDiv.addClass("card-content")
+    
+        let pEl = $("<p>");
+        pEl.text(myCardData[index].strDrink)
+    
+        aEl.append(iEl)
+    
+        cardImgDiv.append(imageEl)
+        cardImgDiv.append(aEl)
+    
+        cardContentDiv.append(pEl)
+        cardDiv.append(cardImgDiv)
+        cardDiv.append(cardContentDiv)
+        divEl.append(cardDiv)
+        bevContainerDiv.append(divEl)
+    
+    }
+// drink modal for later
+    bevContainerDiv.on("click",".dataInfo",function(event){
+        event.preventDefault();
+        console.log(event.target)
+        let moreInfobtnID =($(event.target).attr("data-info"))
+        console.log(cardData)
+        $('.modal').modal();
+        // $("#text").text(cardData[0].title)
+        for (let i = 0; i < cardData.length; i++) {
+                if (cardData[i].id == moreInfobtnID) {
+                    $("#image").attr("src",cardData[i].image)
+                    $("#title").text(cardData[i].title)
+    
+                    $("#readyTime").text("Ready Time: "+ cardData[i].readyInMinutes + " Minutes")
+                    // $("#readyTime").text("Ready Time:" )
+                    for (let j = 0; j < cardData[i].dishTypes.length; j++) {
+                        let liEl = $("<li>")
+                            liEl.text(cardData[i].dishTypes[j])
+        
+                        $("#dishType").append(liEl)
+                        // $(".modal").append($("#dishType"))
+                    
+                    }
+                    $("#urlLink").attr("href",cardData[i].sourceUrl)
+                    $("#urlLink").text("URL is: "+ cardData[i].sourceUrl)
+    
+                    for (let k = 0; k < cardData[i].extendedIngredients.length; k++) {
+                        let liIngEl = $("<li>")
+                        liIngEl.text(cardData[i].extendedIngredients[k].name)
+        
+                        $("#ingredients").append(liIngEl)
+                        // $(".modal").append($("#ingredients"))
+                    
+                    }                
+    
+        
+                }
+                }
+    })
 
 
 // write a function that passes theme through as a parameter. pass through a bollean (true,false alc, no alc, both) if statement value = no alcohol call this function, pass theme through as a parameter
