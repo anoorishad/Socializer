@@ -1,6 +1,7 @@
 let apiKey = "6bca597935dc4ccd9d79be1d669d849d";
 let numberofRecipes = 8;
-let foodContainerDiv = $(".food-container")
+let foodContainerDiv = $(".food-container");
+let bevContainerDiv = $("#bev-container");
 let presentRecipe = [];
 let theme = "BBQ"
 let requestfoodRecipeURL;
@@ -55,6 +56,7 @@ let bevGeneralParty = [
 let idArray = [];
 // include all recepies for specific theme
 let cardData = [];
+let bevCardData = [];
 let birthdayPartyInfo = [];
 let engagementPartyInfo = [];
 let BBQInfo = [];
@@ -128,7 +130,7 @@ submitBtn.on('click', async function () {
     getBevResults(alchSelection, themeSelection)
 
 
-    cardData = await setRecipeforTheme(idArray, themeSelection)
+    // cardData = await setRecipeforTheme(idArray, themeSelection)
     console.log("the card is:")
     console.log(cardData)
     if (cardData) {
@@ -627,12 +629,13 @@ function fetchBevURLfromID(idDrink) {
                return response.json();
             })
             .then(function (data) {
-                console.log(data.drinks[0].strDrink)
+                
                 console.log(data.drinks[0].strDrinkThumb)
                 creatBevCard(data.drinks,0);
             });
         
     };
+
 
     function creatBevCard(myCardData,index) {
         console.log(myCardData);
@@ -653,7 +656,7 @@ function fetchBevURLfromID(idDrink) {
         let iEl = $("<i>")
         iEl.addClass("dataInfo material-icons btn modal-trigger");
         iEl.attr("data-info", myCardData[index].idDrink)
-        iEl.attr("data-target","modal1")
+        iEl.attr("data-target","bevModal")
         iEl.text("...")
     
     
@@ -675,47 +678,107 @@ function fetchBevURLfromID(idDrink) {
         bevContainerDiv.append(divEl)
     
     }
-// drink modal for later
+// drink modal
     bevContainerDiv.on("click",".dataInfo",function(event){
         event.preventDefault();
+
         console.log(event.target)
+
         let moreInfobtnID =($(event.target).attr("data-info"))
-        console.log(cardData)
-        $('.modal').modal();
-        // $("#text").text(cardData[0].title)
-        for (let i = 0; i < cardData.length; i++) {
-                if (cardData[i].id == moreInfobtnID) {
-                    $("#image").attr("src",cardData[i].image)
-                    $("#title").text(cardData[i].title)
-    
-                    $("#readyTime").text("Ready Time: "+ cardData[i].readyInMinutes + " Minutes")
-                    // $("#readyTime").text("Ready Time:" )
-                    for (let j = 0; j < cardData[i].dishTypes.length; j++) {
-                        let liEl = $("<li>")
-                            liEl.text(cardData[i].dishTypes[j])
-        
-                        $("#dishType").append(liEl)
-                        // $(".modal").append($("#dishType"))
-                    
-                    }
-                    $("#urlLink").attr("href",cardData[i].sourceUrl)
-                    $("#urlLink").text("URL is: "+ cardData[i].sourceUrl)
-    
-                    for (let k = 0; k < cardData[i].extendedIngredients.length; k++) {
-                        let liIngEl = $("<li>")
-                        liIngEl.text(cardData[i].extendedIngredients[k].name)
-        
-                        $("#ingredients").append(liIngEl)
-                        // $(".modal").append($("#ingredients"))
-                    
-                    }                
-    
-        
-                }
-                }
-    })
+        $('#bevIngredients').text("");
+
+        requestBevURL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + moreInfobtnID
+
+        fetch(requestBevURL)
+             .then(function (response) {
+                return response.json();
+             })
+             .then(function (data) {
+                 console.log(data);
+                 $("#bevTitle").text(data.drinks[0].strDrink);
+                 $("#bevImage").attr("src",data.drinks[0].strDrinkThumb);
+                 $('#bevInstructions').text(data.drinks[0].strInstructions);
+
+                 if (data.drinks[0].strIngredient1 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient1;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient2 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient2;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient3 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient3;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient4 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient4;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient5 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient5;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient6 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient6;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient7 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient7;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient8 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient8;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient9 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient9;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient10 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient10;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient11 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient11;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient12 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient12;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient13 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient13;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient14 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient14;
+                     $("#bevIngredients").append(ingredient)
+                 }
+                 if (data.drinks[0].strIngredient15 != null ) {
+                     var ingredient = document.createElement("li")
+                     ingredient.textContent = data.drinks[0].strIngredient15;
+                     $("#bevIngredients").append(ingredient)
+                 }
 
 
-// write a function that passes theme through as a parameter. pass through a bollean (true,false alc, no alc, both) if statement value = no alcohol call this function, pass theme through as a parameter
 
-// themeSelection = $('#eventFilter').val();
+        })
+        $('#bevModal').modal();
+
+             });
+         
