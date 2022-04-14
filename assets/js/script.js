@@ -1,4 +1,4 @@
-let apiKey = "6bca597935dc4ccd9d79be1d669d849d";
+let apiKey = "21365b6c3a364bcfaf6a0a422fdff0cf";
 let numberofRecipes = 8;
 let foodContainerDiv = $(".food-container");
 let bevContainerDiv = $("#bev-container");
@@ -114,14 +114,15 @@ function setlocalStorage() {
 
 // get the informationfrom local array
 idArray = JSON.parse(localStorage.getItem("allRecipe"))
-// saghar fix here
-// if (idArray[0].idRecipe.length === 0) {
-//     getRecipeData();
-// }
+
 
 // submit button
 submitBtn.on('click', async function () {
-    reset();
+    // saghar fix here
+if (idArray.length === 0) {
+    getRecipeData();
+}
+reset();
     themeSelection = $('#eventFilter').val();
     alchSelection = $('#alchFilter').val();
 
@@ -138,7 +139,7 @@ submitBtn.on('click', async function () {
             creatCard(cardData, i)
         }
     }
-
+    
     resultPageLayout();
 })
 
@@ -150,6 +151,7 @@ function reset() {
 
     foodContainerDiv.empty();
     cardData = [];
+    presentRecipe=[];
 
 }
 
@@ -464,7 +466,7 @@ async function setRecipeforTheme(myidArray, myTheme) {
             brunch.push(getThemeRecipes("eggs", myidArray).idRecipe)
             brunch.push(getThemeRecipes("frittata", myidArray).idRecipe)
             brunch.push(getThemeRecipes("salad", myidArray).idRecipe)
-            brunchInfo = await getURL(brunchInfo)
+            brunchInfo = await getURL(brunch)
             localStorage.setItem("brunch", JSON.stringify(brunchInfo))
         }
 
@@ -508,7 +510,7 @@ async function setRecipeforTheme(myidArray, myTheme) {
     }
     if (myTheme === "holiday") {
         holidayInfo = JSON.parse(localStorage.getItem("holiday"))
-        if (holidayInfo.concat.length == 0) {
+        if (holidayInfo.length == 0) {
             presentRecipe = []
             holiday.push(getThemeRecipes("casserole", myidArray).idRecipe)
             holiday.push(getThemeRecipes("salad", myidArray).idRecipe)
@@ -526,10 +528,10 @@ async function setRecipeforTheme(myidArray, myTheme) {
         generalPartyInfo = JSON.parse(localStorage.getItem("generalParty"))
         if (generalPartyInfo.length == 0) {
             presentRecipe = []
-            generalParty.push(getThemeRecipes("pasta", myidArray))
-            generalParty.push(getThemeRecipes("pizza", myidArray))
-            generalParty.push(getThemeRecipes("tacos", myidArray))
-            generalParty.push(getThemeRecipes("roast", myidArray))
+            generalParty.push(getThemeRecipes("pasta", myidArray).idRecipe)
+            generalParty.push(getThemeRecipes("pizza", myidArray).idRecipe)
+            generalParty.push(getThemeRecipes("tacos", myidArray).idRecipe)
+            generalParty.push(getThemeRecipes("roast", myidArray).idRecipe)
             generalPartyInfo = await getURL(generalParty)
             localStorage.setItem("generalParty", JSON.stringify(generalPartyInfo))
         }
