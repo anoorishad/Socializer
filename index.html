@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -12,11 +11,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <title>Socializer</title>
 </head>
-
 <body>
   <header id="titleContainer"  >
     <nav><h1><a href=".">Socializer</a></h1></nav>
-    
     <section class="container center-align hidable">
       <h3 class="hidable">Instructions</h3>
       <p class="hidable">Struggling to connect with people after the pandemic has let you quarentine for a while? Socializer is here to help you setup an event and get back out there! Select a type of event, name it, and if Alcohol is acceptable, click submit, and get some drinks and recipes for your event!</p>
@@ -24,14 +21,8 @@
     <button id="savedEventsBtn">Saved Event(s)</button>
   </header>
   <main>
-
-    <section id="initialContainer" class="container">
-
-
-
     <!-- Modal Trigger -->
     <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
-
     <!-- Modal Structure -->
     <div id="modal1" class="modal ">
       <div class="row">
@@ -46,19 +37,13 @@
           <a id="urlLink" href="" target="_blanck">URL to Rec</a>
           <h5 class="">Ingredients:</h5>
           <ul id="ingredients"></ul>
-
         </div>
       </div>
-
-
       <div class="modal-footer ">
         <a href="#!" class="modal-close waves-effect waves-green btn-flat">OK</a>
       </div>
     </div>
-
-
     <section id="initialContainer" class="container d-flex align-items-center ">
-
       <h4>What type of event are you planning?</43>
         <!-- Event type dropdown -->
         <div class="input-field">
@@ -76,59 +61,45 @@
             <option value="generalParty">General Party</option>
           </select>
         </div>
-
         <input id="eventNameInput" type="text" placeholder="What do you want to name this event?" />
-
         <!-- Alcohol Filter -->
         <div class="input-field">
           <select id="alchFilter">
             <option value="" disabled selected>Choose your option</option>
-            <option value="Inc_Alcohol">Only alcoholic</option>
-            <option value="Dont_Inc">No alcohol</option>
+            <option value="Inc_Alcohol">Include Alcohol</option>
+            <option value="Dont_Inc">Don't Include</option>
             <option value="Show_Both">Show Both</option>
           </select>
           <label>Include Alcohol?</label>
         </div>
         <!--Submit Button  -->
-
-        <button id="submitBtn" class="btn waves-effect waves-light">Submit</button>
+        <button id="submitBtn">Submit</button>
         <div class="progress">
           <div class="indeterminate"></div>
       </div>
     </section>
-
-
     <!-- carrd -->
     <div id="food-container" class="row">
-
       <!-- start dynamicly -->
-      <div class="col s2 m-6">
+      <!-- <div class="col s2 m-6">
         <div class="card ">
           <div class="card-image">
             <img src="https://materializecss.com/images/sample-1.jpg">
-            
             <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
           </div>
           <div class="card-content">
             <p>Card Title</p>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- end dynamic -->
-
     </div>
     <!-- carrd -->
-
-
-
     <!-- end of card -->
   </main>
-
   <footer></footer>
-
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script src="./assets/js/script.js"></script>
 </body>
-
 </html>
