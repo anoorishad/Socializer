@@ -113,9 +113,9 @@ function setlocalStorage() {
 // get the informationfrom local array
 idArray = JSON.parse(localStorage.getItem("allRecipe"))
 // saghar fix here
-if (idArray[0].idRecipe.length === 0) {
-    getRecipeData();
-}
+// if (idArray[0].idRecipe.length === 0) {
+//     getRecipeData();
+// }
 
 // submit button
 submitBtn.on('click', async function () {
