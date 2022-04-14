@@ -1,6 +1,7 @@
-let apiKey = "6bca597935dc4ccd9d79be1d669d849d";
+let apiKey = "21365b6c3a364bcfaf6a0a422fdff0cf";
 let numberofRecipes = 8;
-let foodContainerDiv = $(".food-container")
+let foodContainerDiv = $(".food-container");
+let bevContainerDiv = $("#bev-container");
 let presentRecipe = [];
 let theme = "BBQ"
 let requestfoodRecipeURL;
@@ -112,14 +113,15 @@ function setlocalStorage() {
 
 // get the informationfrom local array
 idArray = JSON.parse(localStorage.getItem("allRecipe"))
-// saghar fix here
-// if (idArray[0].idRecipe.length === 0) {
-//     getRecipeData();
-// }
+
 
 // submit button
 submitBtn.on('click', async function () {
-    reset();
+    // saghar fix here
+if (idArray.length === 0) {
+    getRecipeData();
+}
+reset();
     themeSelection = $('#eventFilter').val();
     alchSelection = $('#alchFilter').val();
 
@@ -136,7 +138,7 @@ submitBtn.on('click', async function () {
             creatCard(cardData, i)
         }
     }
-
+    
     resultPageLayout();
 })
 
@@ -148,6 +150,7 @@ function reset() {
 
     foodContainerDiv.empty();
     cardData = [];
+    presentRecipe=[];
 
 }
 
@@ -462,7 +465,7 @@ async function setRecipeforTheme(myidArray, myTheme) {
             brunch.push(getThemeRecipes("eggs", myidArray).idRecipe)
             brunch.push(getThemeRecipes("frittata", myidArray).idRecipe)
             brunch.push(getThemeRecipes("salad", myidArray).idRecipe)
-            brunchInfo = await getURL(brunchInfo)
+            brunchInfo = await getURL(brunch)
             localStorage.setItem("brunch", JSON.stringify(brunchInfo))
         }
 
@@ -506,7 +509,7 @@ async function setRecipeforTheme(myidArray, myTheme) {
     }
     if (myTheme === "holiday") {
         holidayInfo = JSON.parse(localStorage.getItem("holiday"))
-        if (holidayInfo.concat.length == 0) {
+        if (holidayInfo.length == 0) {
             presentRecipe = []
             holiday.push(getThemeRecipes("casserole", myidArray).idRecipe)
             holiday.push(getThemeRecipes("salad", myidArray).idRecipe)
@@ -524,10 +527,10 @@ async function setRecipeforTheme(myidArray, myTheme) {
         generalPartyInfo = JSON.parse(localStorage.getItem("generalParty"))
         if (generalPartyInfo.length == 0) {
             presentRecipe = []
-            generalParty.push(getThemeRecipes("pasta", myidArray))
-            generalParty.push(getThemeRecipes("pizza", myidArray))
-            generalParty.push(getThemeRecipes("tacos", myidArray))
-            generalParty.push(getThemeRecipes("roast", myidArray))
+            generalParty.push(getThemeRecipes("pasta", myidArray).idRecipe)
+            generalParty.push(getThemeRecipes("pizza", myidArray).idRecipe)
+            generalParty.push(getThemeRecipes("tacos", myidArray).idRecipe)
+            generalParty.push(getThemeRecipes("roast", myidArray).idRecipe)
             generalPartyInfo = await getURL(generalParty)
             localStorage.setItem("generalParty", JSON.stringify(generalPartyInfo))
         }
@@ -676,44 +679,44 @@ function fetchBevURLfromID(idDrink) {
     
     }
 // drink modal for later
-    bevContainerDiv.on("click",".dataInfo",function(event){
-        event.preventDefault();
-        console.log(event.target)
-        let moreInfobtnID =($(event.target).attr("data-info"))
-        console.log(cardData)
-        $('.modal').modal();
-        // $("#text").text(cardData[0].title)
-        for (let i = 0; i < cardData.length; i++) {
-                if (cardData[i].id == moreInfobtnID) {
-                    $("#image").attr("src",cardData[i].image)
-                    $("#title").text(cardData[i].title)
+    // bevContainerDiv.on("click",".dataInfo",function(event){
+    //     event.preventDefault();
+    //     console.log(event.target)
+    //     let moreInfobtnID =($(event.target).attr("data-info"))
+    //     console.log(cardData)
+    //     $('.modal').modal();
+    //     // $("#text").text(cardData[0].title)
+    //     for (let i = 0; i < cardData.length; i++) {
+    //             if (cardData[i].id == moreInfobtnID) {
+    //                 $("#image").attr("src",cardData[i].image)
+    //                 $("#title").text(cardData[i].title)
     
-                    $("#readyTime").text("Ready Time: "+ cardData[i].readyInMinutes + " Minutes")
-                    // $("#readyTime").text("Ready Time:" )
-                    for (let j = 0; j < cardData[i].dishTypes.length; j++) {
-                        let liEl = $("<li>")
-                            liEl.text(cardData[i].dishTypes[j])
+    //                 $("#readyTime").text("Ready Time: "+ cardData[i].readyInMinutes + " Minutes")
+    //                 // $("#readyTime").text("Ready Time:" )
+    //                 for (let j = 0; j < cardData[i].dishTypes.length; j++) {
+    //                     let liEl = $("<li>")
+    //                         liEl.text(cardData[i].dishTypes[j])
         
-                        $("#dishType").append(liEl)
-                        // $(".modal").append($("#dishType"))
+    //                     $("#dishType").append(liEl)
+    //                     // $(".modal").append($("#dishType"))
                     
-                    }
-                    $("#urlLink").attr("href",cardData[i].sourceUrl)
-                    $("#urlLink").text("URL is: "+ cardData[i].sourceUrl)
+    //                 }
+    //                 $("#urlLink").attr("href",cardData[i].sourceUrl)
+    //                 $("#urlLink").text("URL is: "+ cardData[i].sourceUrl)
     
-                    for (let k = 0; k < cardData[i].extendedIngredients.length; k++) {
-                        let liIngEl = $("<li>")
-                        liIngEl.text(cardData[i].extendedIngredients[k].name)
+    //                 for (let k = 0; k < cardData[i].extendedIngredients.length; k++) {
+    //                     let liIngEl = $("<li>")
+    //                     liIngEl.text(cardData[i].extendedIngredients[k].name)
         
-                        $("#ingredients").append(liIngEl)
-                        // $(".modal").append($("#ingredients"))
+    //                     $("#ingredients").append(liIngEl)
+    //                     // $(".modal").append($("#ingredients"))
                     
-                    }                
+    //                 }                
     
         
-                }
-                }
-    })
+    //             }
+    //             }
+    // })
 
 
 // write a function that passes theme through as a parameter. pass through a bollean (true,false alc, no alc, both) if statement value = no alcohol call this function, pass theme through as a parameter
