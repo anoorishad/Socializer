@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <!-- our style sheet link -->
+  <link rel="stylesheet" href="./assets/CSS/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <title>Socializer</title>
+</head>
+<body>
+  <header id="titleContainer"  >
+    <nav><h1><a href="./index.html">Socializer</a></h1></nav>
+    <section class="container center-align hidable">
+      <h3 class="hidable">Instructions</h3>
+      <p class="hidable">Struggling to connect with people after the pandemic? Socializer is here to help you setup an event and get back out there! Select a type of event, pick a name, and decide if alcohol is acceptable. Then click submit and get recipe options and drink pairings for your event!</p>
+  </section>
+    <button id="savedEventsBtn">Finalize Event</button>
+  </header>
+  <main>
+    <!-- Modal Trigger -->
+    <!-- <a class="waves-effect waves-light btn modal-trigger" href="#modal1"></a> -->
+    <a class="waves-effect waves-light  modal-trigger" href="#modal1"></a>
+    
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal ">
+      <div class="row">
+        <div >
+          <img class="img-content col s6" id="image" src="" alt="">
+        </div>
+        <div class="modal-content col s6">
+          <h4 id="title">i dont kniw</h4>
+          <h5 id="readyTime">i dont kniw</h5>
+          <h5 class=" dish ">Dish Type:</h5>
+          <ul id="dishType"></ul>
+          <a id="urlLink" href="" target="_blanck">URL to Rec</a>
+          <h5 class="">Ingredients:</h5>
+          <ul id="ingredients"></ul>
+        </div>
+      </div>
+      <div class="modal-footer ">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">OK</a>
+      </div>
+    </div>
+    <!-- Bev Modal Structure -->
+    <div id="bevModal" class="modal ">
+      <div class="row">
+        <div >
+          <img id="bevImage"class="img-content col s6" src="" alt="">
+        </div>
+        <div class="modal-content col s6">
+          <h4 id="bevTitle">Drink Title</h4>
+          <h5 id="bevInstructions">Bev Instructions</h5>
+          <h5 class="">Ingredients:</h5>
+          <ul id="bevIngredients"></ul>
+        </div>
+      </div>
+      <div class="modal-footer ">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">OK</a>
+      </div>
+    </div>
+
+    <section id="initialContainer" class="container d-flex align-items-center ">
+      <h4>What type of event are you planning?</43>
+        <!-- Event type dropdown -->
+        <div class="input-field">
+          <select id="eventFilter">
+            <option value="" disabled selected>Choose your option</option>
+            <option value="birthdayParty">Birthday Party</option>
+            <option value="engagementParty">Engagement Party</option>
+            <option value="BBQ">BBQ</option>
+            <option value="dateNight">Date Night</option>
+            <option value="babyShower">Baby Shower</option>
+            <option value="brunch">Brunch</option>
+            <option value="dinnerParty">Dinner Party</option>
+            <option value="thanksgiving">Thanksgiving</option>
+            <option value="holiday">Holiday</option>
+            <option value="generalParty">General Party</option>
+          </select>
+        </div>
+        <input id="eventNameInput" type="text" placeholder="What do you want to name this event?" />
+        <!-- Alcohol Filter -->
+        <div class="input-field">
+          <select id="alchFilter">
+            <option value="" disabled selected>Choose your option</option>
+            <option value="Inc_Alcohol">Include Alcohol</option>
+            <option value="Dont_Inc">Don't Include</option>
+            <option value="Show_Both">Show Both</option>
+          </select>
+          <label>Include Alcohol?</label>
+        </div>
+        <!--Submit Button  -->
+        <button id="submitBtn">Submit</button>
+      
+    </section>
+    <!-- carrd -->
+  </section>
+ 
+</header>
+<main>
+  <section class="result col">
+    <h2>Here are your results!!</h2>
+    <div class="foodResult row d-flex">
+      <img id="foodResultImg" src="http://placecorgi.com/260/180">
+      
+      <h4 id="foodResultTitle">not alive</h4>
+      <!-- <h5 id="readyTime">not alive</h5>
+      
+      <a id="urlLink" href=""></a> -->
+    </div>
+    <div class="bevResult row">
+      <img id="bevResultImg" src="http://placecorgi.com/260/200">
+      <h4 id="bevResultTitle">I"M ALIVE</h4>
+    </div>
+  </section>
+    <section  class="food-container row">
+    </section>
+    <!-- carrd -->
+    <!-- end of card -->
+    <div id="bev-container" class="row ">
+    </div>
+    
+  </main>
+  <!-- <footer></footer> -->
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="./assets/js/script.js"></script>
+</body>
+</html>
