@@ -650,6 +650,7 @@ function fetchBevURLfromID(idDrink) {
         cardImgDiv.addClass("card-image")
         let imageEl = $("<img>")
         imageEl.attr("src",myCardData[index].strDrinkThumb)
+        imageEl.attr("data-bevinfo", myCardData[index].idDrink)
 
     
         let aEl = $("<a>")
@@ -663,9 +664,11 @@ function fetchBevURLfromID(idDrink) {
     
         let cardContentDiv = $("<div>")
         cardContentDiv.addClass("card-content")
+        cardContentDiv.attr("data-bevinfo", myCardData[index].idDrink)
     
         let pEl = $("<p>");
         pEl.text(myCardData[index].strDrink)
+        pEl.attr("data-bevinfo", myCardData[index].idDrink)
     
         aEl.append(iEl)
     
@@ -785,10 +788,26 @@ bevContainerDiv.on("click",".dataInfo",function(event){
 
 
 bevContainerDiv.on("click",".card",function(event) {
-    console.log("card clicked")
+    event.preventDefault();
+    console.log("bev card clicked")
+    let selectedBev = ($(event.target).attr("data-bevinfo"))
+    console.log(selectedBev);
+
+
+    requestBevURL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + selectedBev
+
+    fetch(requestBevURL)
+         .then(function (response) {
+            return response.json();
+         })
+         .then(function (data) {
+             console.log(data);
+            //  $("#bevTitle").text(data.drinks[0].strDrink);
+            //  $("#bevImage").attr("src",data.drinks[0].strDrinkThumb);
+            //  $('#bevInstructions').text(data.drinks[0].strInstructions);
+
+            });
+
+
 
 });
-
-
-
-
