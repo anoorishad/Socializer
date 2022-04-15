@@ -1,4 +1,4 @@
-let apiKey = "21365b6c3a364bcfaf6a0a422fdff0cf";
+let apiKey = "93831237efc94a5b9f3c37943d1fa29e";
 let numberofRecipes = 8;
 let foodContainerDiv = $(".food-container");
 let bevContainerDiv = $("#bev-container");
@@ -116,13 +116,17 @@ idArray = JSON.parse(localStorage.getItem("allRecipe"))
 
 // submit button
 submitBtn.on('click', async function () {
-    // saghar fix here
-if (idArray.length === 0) {
-    getRecipeData();
-}
-reset();
+    
+    
     themeSelection = $('#eventFilter').val();
     alchSelection = $('#alchFilter').val();
+    reset();
+   
+if (idArray.length === 0) {
+   await getRecipeData(themeSelection);
+}
+
+    
 
     eventNameSelection = $('#eventNameInput').val();
     console.log(themeSelection + " " + alchSelection + " " + eventNameSelection);
@@ -130,13 +134,13 @@ reset();
 
 
     // cardData = await setRecipeforTheme(idArray, themeSelection)
-    console.log("the card is:")
-    console.log(cardData)
-    if (cardData) {
-        for (let i = 0; i < cardData.length; i++) {
-            creatCard(cardData, i)
-        }
-    }
+    // console.log("the card is:")
+    // console.log(cardData)
+    // if (cardData) {
+    //     for (let i = 0; i < cardData.length; i++) {
+    //         creatCard(cardData, i)
+    //     }
+    // }
     
     resultPageLayout();
 })
@@ -146,7 +150,7 @@ $(document).ready(function () {
     $('select').formSelect();
 });
 function reset() {
-
+    idArray=[];
     foodContainerDiv.empty();
     bevContainerDiv.empty();
     cardData = [];
@@ -173,56 +177,41 @@ $(document).ready(function () {
     $('select').formSelect();
 });
 // modal
-
-// food target
 foodContainerDiv.on("click", ".dataInfo", function (event) {
-    event.preventDefault();
+    // event.preventDefault();
     console.log(event.target)
     let moreInfobtnID = ($(event.target).attr("data-info"))
-    console.log(cardData)
+    console.log(moreInfobtnID)
     $('.modal').modal();
-    // $("#text").text(cardData[0].title)
-    for (let i = 0; i < cardData.length; i++) {
-        if (cardData[i].id == moreInfobtnID) {
-            $("#image").attr("src", cardData[i].image)
-            $("#title").text(cardData[i].title)
-
-            $("#readyTime").text("Ready Time: " + cardData[i].readyInMinutes + " Minutes")
+   fetch("https://api.spoonacular.com/recipes/" + moreInfobtnID +"/information?apiKey=" + apiKey).then(function(response){
+       return response.json()
+   }).then(function(data){
+       console.log(data);
+        $("#image").attr("src", data.image)
+        $("#title").text(data.title)
+        $("#readyTime").text("Ready Time: " + data.readyInMinutes + " Minutes")
             // $("#readyTime").text("Ready Time:" )
-            for (let j = 0; j < cardData[i].dishTypes.length; j++) {
-                let liEl = $("<li>")
-                liEl.text(cardData[i].dishTypes[j])
-
-                $("#dishType").append(liEl)
+        for (let j = 0; j < data.dishTypes.length; j++) {
+            let liEl = $("<li>")
+            liEl.text(data.dishTypes[j])
+            $("#dishType").append(liEl)
                 // $(".modal").append($("#dishType"))
-
-            }
-            $("#urlLink").attr("href", cardData[i].sourceUrl)
-            $("#urlLink").text("URL is: " + cardData[i].sourceUrl)
-
-            for (let k = 0; k < cardData[i].extendedIngredients.length; k++) {
-                let liIngEl = $("<li>")
-                liIngEl.text(cardData[i].extendedIngredients[k].name)
-
-                $("#ingredients").append(liIngEl)
+         }
+        $("#urlLink").attr("href", data.sourceUrl)
+         $("#urlLink").text("URL is: " + data.sourceUrl)
+        for (let k = 0; k < data.extendedIngredients.length; k++) {
+            let liIngEl = $("<li>")
+            liIngEl.text(data.extendedIngredients[k].name)
+            $("#ingredients").append(liIngEl)
                 // $(".modal").append($("#ingredients"))
-
-            }
-
-
         }
-    }
+    })
 })
-// if(cardData.length !=0){
-
-
+// f
 $(document).ready(function () {
-    // $('.modal').modal();
-    // $("#text").text(cardData[0].title)
-    //     
-    // }
+ 
 });
-// }
+
 
 // fetching data from https://spoonacular.com/food-api/ 
 function creatCard(myCardData, index) {
@@ -235,13 +224,13 @@ function creatCard(myCardData, index) {
     let cardImgDiv = $("<div>")
     cardImgDiv.addClass("card-image")
     let imageEl = $("<img>")
-    imageEl.attr("src", myCardData[index].image)
+    imageEl.attr("src", myCardData.image)
 
     let aEl = $("<a>")
     aEl.addClass("btn-floating halfway-fab waves-effect waves-light red")
     let iEl = $("<i>")
     iEl.addClass("dataInfo material-icons btn modal-trigger");
-    iEl.attr("data-info", myCardData[index].id)
+    iEl.attr("data-info", myCardData.id)
     iEl.attr("data-target", "modal1")
     iEl.text("...")
 
@@ -250,7 +239,7 @@ function creatCard(myCardData, index) {
     cardContentDiv.addClass("card-content")
 
     let pEl = $("<p>");
-    pEl.text(myCardData[index].title)
+    pEl.text(myCardData.title)
 
     aEl.append(iEl)
 
@@ -264,37 +253,79 @@ function creatCard(myCardData, index) {
     foodContainerDiv.append(divEl)
 
 }
-function getRecipeData() {
+async function getRecipeData(themeSelection) {
 
-    for (let i = 0; i < foodtype.length; i++) {
-        requestUrlfoodRecipeIds = "https://api.spoonacular.com/recipes/complexSearch?query=" + foodtype[i] + "&apiKey=" + apiKey
-        fetch(requestUrlfoodRecipeIds)
+    // for (let i = 0; i < foodtype.length; i++) {
+        // foodtype.forEach(async function(currentItem){
+            let foodSearch=""
+            if(themeSelection === "BBQ"){
+foodSearch ="BBQ"
+            }
+            if(themeSelection === "birthdayParty"){
+foodSearch ="pizza"
+            }
+            if(themeSelection === "engagementParty"){
+foodSearch ="cake"
+            }
+            if(themeSelection === "dateNight"){
+foodSearch ="steak"
+            }
+            if(themeSelection === "babyShower"){
+foodSearch ="tacos"
+            }
+            if(themeSelection === "brunch"){
+foodSearch ="salad"
+            }
+            if(themeSelection === "dinnerParty"){
+foodSearch ="tacos"
+            }
+            if(themeSelection === "thanksgiving"){
+foodSearch ="casserole"
+            }
+            
+            if(themeSelection === "holiday"){
+foodSearch ="roast"
+            
+            }
+            if(themeSelection === "generalParty"){
+foodSearch ="pasta"
+            }
+            requestUrlfoodRecipeIds = "https://api.spoonacular.com/recipes/complexSearch?query=" + foodSearch + "&apiKey=" + apiKey
+            console.log(requestUrlfoodRecipeIds)
+            let data=await fetch(requestUrlfoodRecipeIds)
             .then(function (response) {
                 console.log("response" + response)
 
                 return response.json();
             })
-            .then(function (data) {
-                let food = {
-                    name: foodtype[i],
-                    idRecipe: data.results
-                }
+            
+                    let food = {
+                        name: foodSearch,
+                        idRecipe: data.results
+                    }
 
+                    idArray.push(food);
+                        console.log(idArray)
 
-                idArray.push(food);
-                // wait untill the array to fetch all the data
-                if (idArray.length === foodtype.length) {
-                    console.log(idArray)
-                    // TODO: submit button
-                    // setRecipeforTheme(idArray, themeSelection)
-                    localStorage.setItem("allRecipe", JSON.stringify(idArray));
-
-
-                }
-
-            });
+                        cardData = await setRecipeforTheme(idArray, themeSelection)
+    // console.log("the card is:")
+    // console.log(cardData)
+    if (cardData) {
+        for (let i = 0; i < cardData[0].length; i++) {
+            creatCard(cardData[0][i], i)
+        }
     }
-
+    
+    
+                    // if(currentItem==foodtype[foodtype.length-1]){
+                        // localStorage.setItem("allRecipe", JSON.stringify(idArray));
+                    // }
+  
+        // })
+        
+    // }
+   
+    
 
 }
 
@@ -325,29 +356,30 @@ function getThemeRecipes(themeSelected, myidArray) {
 
 // saghar poblo fix the for loop to go through 40 items
 
-async function getURL(myPresentRecipe) {
-    let promises = [];
+// async function getURL(myPresentRecipe) {
+//     let promises = [];
 
-    myPresentRecipe.forEach(function (currentItem) {
-        if(currentItem != null){
-            for (let i = 0; i < currentItem.length; i++) {
-                console.log(currentItem[i].id)
-                promises.push(fetchURLfromID(currentItem[i].id));
-            }
-        }
+//     myPresentRecipe.forEach(function (currentItem) {
+//         if(currentItem != null){
+//             for (let i = 0; i < currentItem.length; i++) {
+//                 console.log(currentItem[i].id)
+//                 promises.push(fetchURLfromID(currentItem[i].id));
+//             }
+//         }
         
-    })
+//     })
 
-    const values = await Promise.all(promises)
-    console.log("All the promise values:")
-    console.log(values)
-    return values
-}
+//     const values = await Promise.all(promises)
+//     console.log("All the promise values:")
+//     console.log(values)
+//     return values
+// }
 
 
 function pickRecipe(myRecepieArray) {
     let randomIndex;
     var numbers = [];
+if(myRecepieArray.length !=0){
 
     for (let i = 0; i < numberofRecipes; i++) {
         do {
@@ -358,6 +390,7 @@ function pickRecipe(myRecepieArray) {
         presentRecipe.push(myRecepieArray[i])
 
     }
+}
     return presentRecipe;
 
 }
@@ -377,166 +410,94 @@ async function setRecipeforTheme(myidArray, myTheme) {
     let generalParty = [];
 
     if (myTheme === "BBQ") {
-        BBQInfo = JSON.parse(localStorage.getItem("bbq"))
-        if (BBQInfo.length == 0) {
-            presentRecipe = []
-            BBQ.push(getThemeRecipes("sliders", myidArray).idRecipe)
-            BBQ.push(getThemeRecipes("hamburger", myidArray).idRecipe)
+        // BBQInfo = JSON.parse(localStorage.getItem("bbq"))
+        // if (BBQInfo.length == 0) {
+            // presentRecipe = []
+            // BBQ.push(getThemeRecipes("sliders", myidArray).idRecipe)
             BBQ.push(getThemeRecipes("BBQ", myidArray).idRecipe)
-            BBQ.push(getThemeRecipes("salad", myidArray).idRecipe)
-            console.log("bbq here:");
-            console.log(BBQ);
-            BBQInfo = await getURL(BBQ)
-            localStorage.setItem("bbq", JSON.stringify(BBQInfo));
-        }
+            // BBQ.push(getThemeRecipes("BBQ", myidArray).idRecipe)
+            // BBQ.push(getThemeRecipes("salad", myidArray).idRecipe)
+            // console.log("bbq here:");
+            // console.log(BBQ);
+            // BBQInfo = await getURL(BBQ)
+            BBQInfo = BBQ
+            // localStorage.setItem("bbq", JSON.stringify(BBQInfo));
+        // }
 
-        presentRecipe = pickRecipe(BBQInfo);
+        // presentRecipe = pickRecipe(BBQInfo);
 
-        return (presentRecipe);
+        return (BBQInfo);
 
     }
     if (myTheme === "birthdayParty") {
-        birthdayPartyInfo = JSON.parse(localStorage.getItem("birthdayParty"))
-        if (birthdayPartyInfo.length == 0) {
-            presentRecipe = []
-            birthdayParty.push(getThemeRecipes("sliders", myidArray).idRecipe)
-            birthdayParty.push(getThemeRecipes("pizza", myidArray).idRecipe)
-            birthdayParty.push(getThemeRecipes("cake", myidArray).idRecipe)
-            birthdayParty.push(getThemeRecipes("salad", myidArray).idRecipe)
-            birthdayPartyInfo = await getURL(birthdayParty)
-            localStorage.setItem("birthdayParty", JSON.stringify(birthdayPartyInfo));
-        }
+        // birthdayPartyInfo = JSON.parse(localStorage.getItem("birthdayParty"))
+        // if (birthdayPartyInfo.length == 0) {
+        //     presentRecipe = []
+            birthdayPartyInfo.push(getThemeRecipes("pizza", myidArray).idRecipe)
+            // birthdayParty.push(getThemeRecipes("pizza", myidArray).idRecipe)
+            // birthdayParty.push(getThemeRecipes("cake", myidArray).idRecipe)
+            // birthdayParty.push(getThemeRecipes("salad", myidArray).idRecipe)
+        //     birthdayPartyInfo = await getURL(birthdayParty)
+        //     localStorage.setItem("birthdayParty", JSON.stringify(birthdayPartyInfo));
+        // // }
 
-        presentRecipe = pickRecipe(birthdayPartyInfo);
+        
+    return (birthdayPartyInfo);
 
-        return (presentRecipe);
+        
     }
     if (myTheme === "engagementParty") {
-        engagementPartyInfo = JSON.parse(localStorage.getItem("engagementParty"))
-        if (engagementPartyInfo.length == 0) {
-            presentRecipe = []
-            engagementParty.push(getThemeRecipes("sandwich", myidArray).idRecipe)
-            engagementParty.push(getThemeRecipes("salad", myidArray).idRecipe)
-            engagementParty.push(getThemeRecipes("cake", myidArray).idRecipe)
-            engagementParty.push(getThemeRecipes("casserole", myidArray).idRecipe)
-            engagementPartyInfo = await getURL(engagementParty)
-            localStorage.setItem("engagementParty", JSON.stringify(engagementPartyInfo));
-        }
-        presentRecipe = pickRecipe(engagementPartyInfo);
-        return (presentRecipe);
+        
+        engagementPartyInfo.push(getThemeRecipes("cake", myidArray).idRecipe)
+            
+        return (engagementPartyInfo);
     }
     if (myTheme === "dateNight") {
-        dateNightInfo = JSON.parse(localStorage.getItem("dateNight"))
-        if (dateNightInfo.length == 0) {
-            presentRecipe = []
-            dateNight.push(getThemeRecipes("pasta", myidArray).idRecipe)
-            dateNight.push(getThemeRecipes("salad", myidArray).idRecipe)
-            dateNight.push(getThemeRecipes("steak", myidArray).idRecipe)
-            dateNight.push(getThemeRecipes("roast", myidArray).idRecipe)
-            dateNightInfo = await getURL(dateNight)
-            localStorage.setItem("dateNight", JSON.stringify(dateNightInfo));
-        }
+        
+            
+            dateNightInfo.push(getThemeRecipes("steak", myidArray).idRecipe)
+            
 
-        presentRecipe = pickRecipe(dateNightInfo);
-
-        return (presentRecipe);
+        return (dateNightInfo);
     }
     if (myTheme === "babyShower") {
-        babyShowerInfo = JSON.parse(localStorage.getItem("babyShower"))
-        if (babyShowerInfo.length == 0) {
-            presentRecipe = []
-            babyShower.push(getThemeRecipes("sandwhich", myidArray).idRecipe)
-            babyShower.push(getThemeRecipes("salad", myidArray).idRecipe)
-            babyShower.push(getThemeRecipes("steak", myidArray).idRecipe)
-            babyShower.push(getThemeRecipes("roast", myidArray).idRecipe)
-            babyShowerInfo = await getURL(babyShower)
-            localStorage.setItem("babyShower", JSON.stringify(babyShowerInfo))
-        }
-        presentRecipe = pickRecipe(babyShowerInfo);
+     
+            babyShowerInfo.push(getThemeRecipes("tacos", myidArray).idRecipe)
+           
 
-        return (presentRecipe);
+        return (babyShowerInfo);
     }
     if (myTheme === "brunch") {
-        brunchInfo = JSON.parse(localStorage.getItem("brunch"))
-        if (brunchInfo.length == 0) {
-
-            presentRecipe = []
-            brunch.push(getThemeRecipes("pancakes", myidArray).idRecipe)
-            brunch.push(getThemeRecipes("eggs", myidArray).idRecipe)
-            brunch.push(getThemeRecipes("frittata", myidArray).idRecipe)
-            brunch.push(getThemeRecipes("salad", myidArray).idRecipe)
-            brunchInfo = await getURL(brunch)
-            localStorage.setItem("brunch", JSON.stringify(brunchInfo))
-        }
-
-        presentRecipe = pickRecipe(brunchInfo);
-
-
-
-        return (presentRecipe);
+        
+            brunchInfo.push(getThemeRecipes("salad", myidArray).idRecipe)
+           
+        return (brunchInfo);
     }
     if (myTheme === "dinnerParty") {
-        dinnerPartyInfo = JSON.parse(localStorage.getItem("dinnerParty"))
-        if (dinnerPartyInfo.length == 0) {
-            presentRecipe = []
-            dinnerParty.push(getThemeRecipes("steak", myidArray).idRecipe)
-            dinnerParty.push(getThemeRecipes("salad", myidArray).idRecipe)
-            dinnerParty.push(getThemeRecipes("pasta", myidArray).idRecipe)
-            dinnerParty.push(getThemeRecipes("tacos", myidArray).idRecipe)
+        
+            dinnerPartyInfo.push(getThemeRecipes("tacos", myidArray).idRecipe)
 
-            dinnerPartyInfo = await getURL(dinnerParty)
-            localStorage.setItem("dinnerParty", JSON.stringify(dinnerPartyInfo))
-        }
-        presentRecipe = pickRecipe(dinnerPartyInfo);
-        return (presentRecipe);
+        return (dinnerPartyInfo);
     }
     if (myTheme === "thanksgiving") {
-        thanksgivingInfo = JSON.parse(localStorage.getItem("thanksgiving"))
-        if (thanksgivingInfo.length == 0) {
-            presentRecipe = []
-            thanksgiving.push(getThemeRecipes("casserole", myidArray).idRecipe)
-            thanksgiving.push(getThemeRecipes("thanksgiving", myidArray).idRecipe)
-            thanksgiving.push(getThemeRecipes("roast", myidArray).idRecipe)
-            thanksgiving.push(getThemeRecipes("dessert", myidArray).idRecipe)
+        
+            thanksgivingInfo.push(getThemeRecipes("casserole", myidArray).idRecipe)
+            
 
-            thanksgivingInfo = await getURL(thanksgiving)
-            localStorage.setItem("thanksgiving", JSON.stringify(thanksgivingInfo))
-        }
-
-        presentRecipe = pickRecipe(thanksgivingInfo);
-
-        return (presentRecipe);
+        return (thanksgivingInfo);
     }
     if (myTheme === "holiday") {
-        holidayInfo = JSON.parse(localStorage.getItem("holiday"))
-        if (holidayInfo.length == 0) {
-            presentRecipe = []
-            holiday.push(getThemeRecipes("casserole", myidArray).idRecipe)
-            holiday.push(getThemeRecipes("salad", myidArray).idRecipe)
-            holiday.push(getThemeRecipes("roast", myidArray).idRecipe)
-            holiday.push(getThemeRecipes("dessert", myidArray).idRecipe)
-            holidayInfo = await getURL(holiday)
-            localStorage.setItem("holiday", JSON.stringify(holidayInfo))
-        }
+      
+            holidayInfo.push(getThemeRecipes("roast", myidArray).idRecipe)
+           
 
-        presentRecipe = pickRecipe(holidayInfo);
-
-        return (presentRecipe);
+        return (holidayInfo);
     }
     if (myTheme === "generalParty") {
-        generalPartyInfo = JSON.parse(localStorage.getItem("generalParty"))
-        if (generalPartyInfo.length == 0) {
-            presentRecipe = []
-            generalParty.push(getThemeRecipes("pasta", myidArray).idRecipe)
-            generalParty.push(getThemeRecipes("pizza", myidArray).idRecipe)
-            generalParty.push(getThemeRecipes("tacos", myidArray).idRecipe)
-            generalParty.push(getThemeRecipes("roast", myidArray).idRecipe)
-            generalPartyInfo = await getURL(generalParty)
-            localStorage.setItem("generalParty", JSON.stringify(generalPartyInfo))
-        }
-
-        presentRecipe = pickRecipe(generalPartyInfo);
-        return (presentRecipe)
+       
+            generalPartyInfo.push(getThemeRecipes("pasta", myidArray).idRecipe)
+            
+        return (generalPartyInfo)
 
     }
 
