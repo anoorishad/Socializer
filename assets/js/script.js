@@ -1,4 +1,4 @@
-let apiKey = "93831237efc94a5b9f3c37943d1fa29e";
+let apiKey = "67a06d64b3504031a9ad3615a54475fb";
 let numberofRecipes = 8;
 let foodContainerDiv = $(".food-container");
 let bevContainerDiv = $("#bev-container");
@@ -211,19 +211,50 @@ foodContainerDiv.on("click", ".dataInfo", function (event) {
 $(document).ready(function () {
  
 });
-
+foodContainerDiv.on("click", ".groupCard", function (event) {
+    event.preventDefault();
+    console.log(event.target)
+    let selectedFood = ($(event.target).attr("data-information"))
+    console.log(selectedFood)
+   
+//    fetch("https://api.spoonacular.com/recipes/" + selectedFood +"/information?apiKey=" + apiKey).then(function(response){
+//        return response.json()
+//    }).then(function(data){
+//        console.log(data);
+//         $("#image").attr("src", data.image)
+//         $("#title").text(data.title)
+//         $("#readyTime").text("Ready Time: " + data.readyInMinutes + " Minutes")
+           
+//         for (let j = 0; j < data.dishTypes.length; j++) {
+//             let liEl = $("<li>")
+//             liEl.text(data.dishTypes[j])
+//             $("#dishType").append(liEl)
+             
+//          }
+//         $("#urlLink").attr("href", data.sourceUrl)
+//          $("#urlLink").text("URL is: " + data.sourceUrl)
+//         for (let k = 0; k < data.extendedIngredients.length; k++) {
+//             let liIngEl = $("<li>")
+//             liIngEl.text(data.extendedIngredients[k].name)
+//             $("#ingredients").append(liIngEl)
+           
+//         }
+//     })
+})
 
 // fetching data from https://spoonacular.com/food-api/ 
 function creatCard(myCardData, index) {
 
     let divEl = $("<div>")
 
-    divEl.addClass("showDard col s2 m-6")
+    divEl.addClass("groupCard col s2 m-6")
+    
     let cardDiv = $("<div>")
     cardDiv.addClass("card")
     let cardImgDiv = $("<div>")
     cardImgDiv.addClass("card-image")
     let imageEl = $("<img>")
+    imageEl.attr("data-information", myCardData.id)
     imageEl.attr("src", myCardData.image)
 
     let aEl = $("<a>")
@@ -237,9 +268,10 @@ function creatCard(myCardData, index) {
 
     let cardContentDiv = $("<div>")
     cardContentDiv.addClass("card-content")
-
+    cardContentDiv.attr("data-information", myCardData.id)
     let pEl = $("<p>");
     pEl.text(myCardData.title)
+    pEl.attr("data-information", myCardData.id)
 
     aEl.append(iEl)
 
