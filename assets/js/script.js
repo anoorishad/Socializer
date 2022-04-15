@@ -1,4 +1,4 @@
-let apiKey = "67a06d64b3504031a9ad3615a54475fb";
+let apiKey = "e4c7d4aac49648c38dff3000553216d5";
 let numberofRecipes = 8;
 let foodContainerDiv = $(".food-container");
 let bevContainerDiv = $("#bev-container");
