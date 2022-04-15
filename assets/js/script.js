@@ -2,6 +2,7 @@ let apiKey = "67a06d64b3504031a9ad3615a54475fb";
 let numberofRecipes = 8;
 let foodContainerDiv = $(".food-container");
 let bevContainerDiv = $("#bev-container");
+let savedEventBtn = $("#savedEventsBtn");
 let presentRecipe = [];
 let theme = "BBQ"
 let requestfoodRecipeURL;
@@ -145,6 +146,11 @@ if (idArray.length === 0) {
     resultPageLayout();
 })
 
+savedEventBtn.on("click", function(){
+    foodContainerDiv.empty();
+    bevContainerDiv.empty();
+})
+
 // dropdown initializer
 $(document).ready(function () {
     $('select').formSelect();
@@ -161,6 +167,7 @@ function reset() {
 function resultPageLayout() {
     var main = $("main");
     main.attr("class", "row");
+    
     var initContainer = $("#initialContainer");
     // this needs to be a  class that will dynamically change on different screen sizes, right now it will always take up 1/3 the screen
     initContainer.addClass("col s3")
